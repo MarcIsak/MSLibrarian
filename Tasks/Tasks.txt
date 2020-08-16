@@ -1,4 +1,10 @@
-Task 1: 
+Task 1 (GUI): 
 
-Use a file dialog box to locate the path of a DIA MS file (*.raw) which will be processed furtheron.
+Use a file dialog box to locate the path of a DIA MS file (*.raw) which will be processed further on.
+
+Task 2 (GUI): 
+
+Call a function which launches msconvert.exe, a program which converts the input DIA MS-file from the vendor format (*.raw) to a DIA-Umpire compatible format (*.mzXML).
+
+Some default settings are required to make it work.
 
