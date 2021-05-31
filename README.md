@@ -30,13 +30,14 @@ library(devtools)
 install_github("MarcIsak/MSLibrarian", auth_token = "change-to-your-personal-access-token")
 
 ```
-
 ### Run MSLibrarian 
 
-To run MSLibrarian from your library folder, you simply run: 
+To use MSLibrarian from your library folder, you simply run: 
 
 ```
 library(MSLibrarian)
 
 ```
+To learn how to run MSLibrarian, go the subfolder **examples** of this repository and follow the tutorial described in **demo_mslibr.rmd**.
+
 
