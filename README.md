@@ -19,8 +19,6 @@ To run MSLibrarian, the following softwares/pipelines must be installed on the *
  * [**PREGO**](https://bitbucket.org/searleb/prego-srm-response-predictor/downloads/) 
  * [**DeepLC GUI v0.1.29**](https://github.com/compomics/DeepLC/releases) or higher. _Follow the installation guide to setup the miniconda environment._
 
-## Creating a predicted spectral library with _MSLibrarian_
-
 ### Download MSLibrarian from Github
 
 To install _MSLibrarian_ from Github, you can make use of the **devtools** package. Currently, the repository is private, meaning that those with access needs to provide a [personal access token (PAT)](https://github.com/settings/tokens) to the argument _auth_token_ of the _install_github_ function. In the future, the repository will become a public one.  
