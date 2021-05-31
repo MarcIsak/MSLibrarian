@@ -1,7 +1,4 @@
 # MSLibrarian
-## Introduction 
-
-In this workflow, we will use the R software package _MSLibrarian_ to create predicted spectral libraries for DIA proteomics analyses. MSLibrarian makes use of the DIA data at hand to incorporate calibrated predictions of both fragment ion intensities and retention times into the built spectral library. Apart from creating spectral libraries, it offers tools to manipulate existing spectral libraries on the protein, peptide and transition level. 
 
 ### Hardware requirements and recommedations
 
