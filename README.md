@@ -33,7 +33,7 @@ install_github("MarcIsak/MSLibrarian", auth_token = "change-to-your-personal-acc
 
 ### Run MSLibrarian 
 
-To run MSLibrarian from your library folder, you simply run 
+To run MSLibrarian from your library folder, you simply run: 
 
 ```
 library(MSLibrarian)
