@@ -19,12 +19,24 @@ To run MSLibrarian, the following softwares/pipelines must be installed on the *
  * [**PREGO**](https://bitbucket.org/searleb/prego-srm-response-predictor/downloads/) 
  * [**DeepLC GUI v0.1.29**](https://github.com/compomics/DeepLC/releases) or higher. _Follow the installation guide to setup the miniconda environment._
 
-## Download MSLibrarian from Github
+## Getting started 
 
-To install _MSLibrarian_ from Github, you can make use of the **devtools** package. Currently, the repository is private, meaning that those with access needs to provide a [personal access token (PAT)](https://github.com/settings/tokens) to the argument _auth_token_ of the _install_github_ function. In the future, the repository will become a public one.  
+### Download and install MSLibrarian from Github
+
+To both download and install _MSLibrarian_ from Github, use the **devtools** package. Currently, the repository is private, meaning that those with access needs to provide a [personal access token (PAT)](https://github.com/settings/tokens) to the argument _auth_token_ of the _install_github_ function. In the future, the repository will become a public.  
 
 ```
 library(devtools)
 install_github("MarcIsak/MSLibrarian", auth_token = "change-to-your-personal-access-token")
 
 ```
+
+### Run MSLibrarian 
+
+To run MSLibrarian from your library folder, you simply run 
+
+```
+library(MSLibrarian)
+
+```
+
