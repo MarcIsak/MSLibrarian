@@ -13,7 +13,7 @@ A recommendation is to use a computer with at least 32 GB RAM to avoid issues du
 
 To run MSLibrarian, the following softwares/pipelines must be installed on the **C:/**-drive: 
 
- * [**R version 4.0.0 **](https://cran.r-project.org/) or higher. 
+ * [**R version 4.0.0**](https://cran.r-project.org/) or higher. 
  * [**Proteowizard suite version 3.0.20365**](http://proteowizard.sourceforge.net/download.html) or higher 
  * [**Trans-proteomic pipeline version 5.2.0**](https://sourceforge.net/projects/sashimi/files/Trans-Proteomic%20Pipeline%20%28TPP%29/) or higher
  * [**OpenMS version 2.5.0**](https://github.com/OpenMS/OpenMS/releases/tag/Release2.6.0) or higher
