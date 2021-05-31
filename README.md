@@ -1,12 +1,14 @@
 # MSLibrarian
 
-### Hardware requirements and recommedations
+## Requirements and recommendations
+
+### Hardware 
 
 In its current form, MSLibrarian **must** be installed on a computer with **Windows** as the operating system. This requirement is mainly a consequence of the current third party softwares that the package uses for its operation. A future aim is to make MSLibrarian a cross-platform application as a docker image. 
 
 A recommendation is to use a computer with at least 32 GB RAM to avoid issues during some of the more memory-requiring tasks that MSLibrarian performs. 
 
-### Software requirements
+### Software 
 
 To run MSLibrarian, the following softwares/pipelines must be installed on the **C:/**-drive: 
 
@@ -17,7 +19,7 @@ To run MSLibrarian, the following softwares/pipelines must be installed on the *
  * [**PREGO**](https://bitbucket.org/searleb/prego-srm-response-predictor/downloads/) 
  * [**DeepLC GUI v0.1.29**](https://github.com/compomics/DeepLC/releases) or higher. _Follow the installation guide to setup the miniconda environment._
 
-### Creating a predicted spectral library with _MSLibrarian_
+## Creating a predicted spectral library with _MSLibrarian_
 
 ### Download MSLibrarian from Github
 
