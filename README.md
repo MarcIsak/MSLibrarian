@@ -25,3 +25,9 @@ To run MSLibrarian, the following softwares/pipelines must be installed on the *
 ### Download package from Github
 
 To install _MSLibrarian_ from Github, you can make use of the **devtools** package. Currently, the repository is private, meaning that those with access needs to provide a [personal access token (PAT)](https://github.com/settings/tokens) to the argument _auth_token_ of the _install_github_ function. In the future, the repository will become a public one.  
+
+```
+library(devtools)
+install_github("MarcIsak/MSLibrarian", auth_token = "change-to-your-personal-access-token")
+
+```
