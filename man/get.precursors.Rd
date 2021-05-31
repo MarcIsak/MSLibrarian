@@ -4,18 +4,18 @@
 \alias{get.precursors}
 \title{Generates precursor m/z values for a filtered list of peptides, given the charge range set.}
 \usage{
-get.precursors(msLib, mzRange, chargeRange, threads, outFile)
+get.precursors(msLib, mzRange, chargeRange, matchDb, threads)
 }
 \arguments{
-\item{msLib}{a scell object}
+\item{msLib}{input MSLibrarian object}
 
 \item{mzRange}{sets the interval for the allowed m/z values.}
 
 \item{chargeRange}{charge ranges for resulting precursor ions}
 
-\item{threads}{number of threads to use for the computation}
+\item{matchDb}{logical indicating if matching to a prediction database will be performed}
 
-\item{outFile}{absolute path to output file with console information from parallel workers}
+\item{threads}{number of threads to use}
 }
 \description{
 Generates precursor m/z values for a filtered list of peptides, given the charge range set.

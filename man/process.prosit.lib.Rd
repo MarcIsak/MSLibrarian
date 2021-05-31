@@ -4,12 +4,22 @@
 \alias{process.prosit.lib}
 \title{Loads a predicted spectral library and extracts the relevant information such as retention time, relative intensities of fragment ions etc.}
 \usage{
-process.prosit.lib(zipfile, filename, output)
+process.prosit.lib(
+  zipfile,
+  noZeroIntensity,
+  transitionFilter,
+  transitionThreshold,
+  output
+)
 }
 \arguments{
 \item{zipfile}{absoute path to the zip file containing the spectral library file}
 
-\item{filename}{name of the file to be extracted from the zip file}
+\item{noZeroIntensity}{logical indicating if all transitions with zero intensities should be removed}
+
+\item{transitionFilter}{logical indicating if a transition filter should be used}
+
+\item{transitionThreshold}{numeric value (0,1) setting the percentage of most observed transitions to include}
 
 \item{output}{absolute path to processed library file, as a RData object}
 }

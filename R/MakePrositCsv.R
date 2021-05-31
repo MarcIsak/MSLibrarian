@@ -1,22 +1,46 @@
 #' Generates a CSV file with precursor information, to be used for prediction of MS/MS spectra in Prosit.
-#' @param msLib input MSLibrarian object
-#' @param collisionEngy Collision energy to use for the prediction in PROSIT.
+#' @param fasta input fasta file
 #' @param chargeRange Charge ranges considered for precursor ions.
-#' @param outputFile full path to the output CSV file
+#' @param ceRange Collision energy range for predictions.
+#' @param prefix file prefix to use (like the species from which the fasta file is derived)
+#' @param outputFolder full path to the output CSV file
+#' @param threads number of threads to use
 #' @export make.prosit.csv
 
-make.prosit.csv <- function(msLib, collisionEngy, chargeRange, outputFile) {
+make.prosit.csv <- function(fasta, chargeRange, ceRange, prefix, outputFolder, threads) {
 
+  print("Load FASTA...")
+  msLib = read.fasta(fasta)
+  Sys.sleep(2)
+  msLib = digest.proteins.tmp(msLib = msLib, rowStr = "Accession", enzyme = "trypsin", maxMissed = 0, carbamidomethyl = T, threads = threads)
+  print("Filter peptides...")
+  msLib = filter.peptides.tmp(msLib = msLib, AALengthRange = c(7, 30), rejectAAs = c("U", "O", "B", "J", "X", "Z"), mzRange = c(0, Inf), chargeRange = chargeRange)
+  msLib = prego.rank(msLib, pregoPath = "C:/Program Files/PREGO/classify.exe", threads = 6)
+  msLib = top.prego.peptides(msLib, n = Inf)
+  msLib = get.precursors(msLib = msLib, mzRange = c(0, Inf), chargeRange = chargeRange, matchDb = F)
 
-  selPrec = msLib@Sequences@Precursors[as.numeric(msLib@Sequences@Precursors[,"Charge"]) >= min(chargeRange) &&
-                                         as.numeric(msLib@Sequences@Precursors[,"Charge"]) <= max(chargeRange),]
+  print("Preparing for writing files...")
 
-  write.csv(data.frame(modified_sequence = selPrec[,"Sequence"],
-                       collision_energy = rep(collisionEngy,times=nrow(selPrec)),
-                       precursor_charge = selPrec[,"Charge"]),
-            file = outputFile,
-            quote = F,
-            sep="",row.names = F,
-            col.names = T)
+  precursorSeq = msLib@Sequences@Precursors$MzPass$peptide_sequence
+  precursorCharge = msLib@Sequences@Precursors$MzPass$precursor_charge
 
+  ceSel = seq(min(ceRange), max(ceRange))
+
+  for (i in ceSel) {
+
+    prositInput = data.frame(modified_sequence = precursorSeq,
+                             collision_energy = rep(i, length(precursorSeq)),
+                             precursor_charge = precursorCharge)
+    csvStr = str_c(prefix,"_digest_ce", as.character(i),".csv", sep = "")
+    print(str_c("writing: ", csvStr))
+    write_csv(prositInput, file = paste(outputFolder, csvStr, sep = ""))
+
+  }
+  write_delim(data.frame(pred_file = str_c(prefix,"_digest_ce", ceSel,".csv", sep = ""),
+                         task_id = NA),
+              file = str_c(outputFolder, "task_id.txt"),
+              delim = "\t")
+  msLib
 }
+
+

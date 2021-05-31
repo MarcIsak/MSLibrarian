@@ -1,39 +1,67 @@
 #' Generates precursor m/z values for a filtered list of peptides, given the charge range set.
-#' @param msLib a scell object
+#' @param msLib input MSLibrarian object
 #' @param mzRange sets the interval for the allowed m/z values.
 #' @param chargeRange charge ranges for resulting precursor ions
-#' @param threads number of threads to use for the computation
-#' @param outFile absolute path to output file with console information from parallel workers
+#' @param matchDb logical indicating if matching to a prediction database will be performed
+#' @param threads number of threads to use
 #' @export get.precursors
 
-get.precursors = function(msLib, mzRange,chargeRange, threads, outFile) {
+get.precursors = function(msLib, mzRange,chargeRange, matchDb, threads) {
 
-  mzVals <- function(x,protonMass) {
+  get.protein.id = function(precursors, duplicatedSeq) {
 
-    y = (x[1] + x[2]*protonMass)/x[2]
+    paste(c(precursors[1],
+            duplicatedPeptides$protein_id[duplicatedPeptides$peptide_sequence == precursors[2]]),
+          collapse = ";")
+
   }
-  massVals = unlist(msLib@Sequences@FilterPeptides$Masses[!is.na(msLib@Sequences@FilterPeptides$Masses)])
-  seqs = unlist(msLib@Sequences@FilterPeptides$Sequences[!is.na(msLib@Sequences@FilterPeptides$Masses)])
+  get.mz.vals = function(x, protonMass) {
 
-  cl <- makeCluster(threads)
-  print("Starting parallel computing again")
-  protonMass = 1.007276499879 # Mass of a proton in Da
+    (x[1] + x[2]*protonMass)/x[2]
 
-  tmp = cbind(rep(massVals, each = length(seq(min(chargeRange),
-                                              max(chargeRange)))),
-              rep(seq(min(chargeRange),max(chargeRange)),
-                  times = length(seq(min(chargeRange),max(chargeRange)))))
+  }
 
+  msLib@Sequences@Peptides$Predictable$duplicated_sequence =
+    duplicated(msLib@Sequences@Peptides$Predictable$peptide_sequence)
 
-  out = parallel::parApply(cl, tmp, 1, mzVals, protonMass) # Consider using in other functions as well. Really good!
+  print("Finding duplicated peptides...")
+  duplicatedPeptides = msLib@Sequences@Peptides$Predictable[msLib@Sequences@Peptides$Predictable$duplicated_sequence,]
+  print("Creating precursor data...")
+  print("Removing duplicated sequences...")
+  precursorCols = c("protein_id", "peptide_sequence", "precursor_mass")
+  precursors = msLib@Sequences@Peptides$Predictable[!msLib@Sequences@Peptides$Predictable$duplicated_sequence, precursorCols]
+  if(matchDb) {
+    predIdx = msLib@Sequences@Peptides$Predictable[!msLib@Sequences@Peptides$Predictable$duplicated_sequence, paste("predIdx_z", chargeRange, sep = "")]
+  }
+  cl = makeCluster(threads)
+  clusterEvalQ(cl, {
+    .libPaths(.libPaths()) # Sets the library path
+  })
+  precursors$protein_id = parallel::parApply(cl,
+                                             precursors[,c("protein_id", "peptide_sequence")],
+                                             1,
+                                             get.protein.id,
+                                             duplicatedPeptides)
   stopCluster(cl)
-  msLib@Sequences@Precursors = cbind(unlist(lapply(seqs,rep,length(seq(min(chargeRange),max(chargeRange))))),
-                                     unlist(lapply(massVals,rep,length(seq(min(chargeRange),max(chargeRange))))),
-                                     out,rep(seq(min(chargeRange),max(chargeRange)),length(seqs)))
-  colnames(msLib@Sequences@Precursors) = c("Sequence", "Mass / Da", "M/Z", "Charge")
-  passMassLim = as.numeric(msLib@Sequences@Precursors[,"M/Z"]) >= min(mzRange) &
-    as.numeric(msLib@Sequences@Precursors[,"M/Z"]) <= max(mzRange)
-  msLib@Sequences@Precursors = msLib@Sequences@Precursors[passMassLim,]
+  precursors = do.call('rbind', replicate(length(chargeRange), precursors, simplify = F))
+  precursors$precursor_charge = rep(chargeRange, each = (nrow(precursors)/length(chargeRange)))
+  toc()
+  print("Calculating m/z values...")
+  protonMass = 1.007276499879 # Mass of a proton in Da
+  precursors$precursor_mz = apply(precursors[,c("precursor_mass", "precursor_charge")], 1, get.mz.vals, protonMass)
+  if(matchDb){
+    print("Database matching enabled...")
+    print("Adding prediction indices...")
+    precursors$predIdx = as.vector(as.matrix(predIdx))
+    predictable = !is.na(precursors$predIdx)
+  }
+  print(str_c("Number of unique precursors: ", nrow(precursors)))
+  print(str_c("Number of unique predictable precursors: ", sum(predictable), " (", round(sum(predictable)*100/nrow(precursors), 2), "% )"))
+  precursors = precursors[predictable,]
+  precursors$mz_pass = precursors$precursor_mz >= min(mzRange) & precursors$precursor_mz <= max(mzRange)
+  msLib@Sequences@Precursors$Unique = precursors
+  msLib@Sequences@Precursors$MzPass = precursors[precursors$mz_pass,-which(grepl("mz_pass", colnames(precursors)))]
+  print(str_c("Number of unique predictable precursors within M/Z range (", min(mzRange), " - ",max(mzRange),"): ", sum(precursors$mz_pass)))
   msLib
 
 }

@@ -4,12 +4,16 @@
 \alias{load.prosit.lib}
 \title{Loads a processed Prosit Library file into a MSLibrarian object}
 \usage{
-load.prosit.lib(msLib, file)
+load.prosit.lib(msLib, file, chargeRange, mzRange)
 }
 \arguments{
 \item{msLib}{input MSLibrarian object}
 
 \item{file}{absolute path to processed Prosit library file}
+
+\item{chargeRange}{numeric vector containing the range of allowed charge states}
+
+\item{mzRange}{numeric vector containing the range of allowed M/Z values}
 }
 \description{
 Loads a processed Prosit Library file into a MSLibrarian object

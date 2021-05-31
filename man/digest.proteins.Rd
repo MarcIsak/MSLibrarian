@@ -4,17 +4,11 @@
 \alias{digest.proteins}
 \title{Returns peptide sequences resulting from protein digestion based on cleavage rules, max.missed cleavages,}
 \usage{
-digest.proteins(
-  sco,
-  rowStr,
-  enzyme,
-  maxMissed,
-  carbamidomethyl,
-  threads,
-  outFile
-)
+digest.proteins(msLib, rowStr, enzyme, maxMissed, carbamidomethyl, threads)
 }
 \arguments{
+\item{msLib}{a MSLibrarian object}
+
 \item{rowStr}{a string defining the row names.}
 
 \item{enzyme}{the enzyme to be used for digestion. The enzyme cleaves proteins according to the specified cleavage rules.}
@@ -24,10 +18,6 @@ digest.proteins(
 \item{carbamidomethyl}{Determines if every Cysteine residue is carbamidomethylated(TRUE) or not (FALSE). If TRUE, every cysteine adds a mass of 57.021464.}
 
 \item{threads}{number of threads to use for the computation}
-
-\item{outFile}{absolute path to output file from parallel workers}
-
-\item{msLib}{a MSLibrarian object}
 }
 \description{
 Returns peptide sequences resulting from protein digestion based on cleavage rules, max.missed cleavages,

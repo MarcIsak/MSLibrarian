@@ -4,7 +4,7 @@
 \alias{plot.spectral.match}
 \title{Visualizes spectral matches (experimental vs. predicted) in a mirror plot}
 \usage{
-plot.spectral.match(
+\method{plot}{spectral.match}(
   msLib,
   libType,
   specIdx,

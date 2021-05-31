@@ -4,16 +4,20 @@
 \alias{make.prosit.csv}
 \title{Generates a CSV file with precursor information, to be used for prediction of MS/MS spectra in Prosit.}
 \usage{
-make.prosit.csv(msLib, collisionEngy, chargeRange, outputFile)
+make.prosit.csv(fasta, chargeRange, ceRange, prefix, outputFolder, threads)
 }
 \arguments{
-\item{msLib}{input MSLibrarian object}
-
-\item{collisionEngy}{Collision energy to use for the prediction in PROSIT.}
+\item{fasta}{input fasta file}
 
 \item{chargeRange}{Charge ranges considered for precursor ions.}
 
-\item{outputFile}{full path to the output CSV file}
+\item{ceRange}{Collision energy range for predictions.}
+
+\item{prefix}{file prefix to use (like the species from which the fasta file is derived)}
+
+\item{outputFolder}{full path to the output CSV file}
+
+\item{threads}{number of threads to use}
 }
 \description{
 Generates a CSV file with precursor information, to be used for prediction of MS/MS spectra in Prosit.
