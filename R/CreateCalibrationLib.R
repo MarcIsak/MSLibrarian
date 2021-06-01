@@ -16,9 +16,25 @@
 #' @param threads Number of threads or parallel processes to use. Will by default use all available logical processors.
 #' @export create.calibration.lib
 
-create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = NULL, tppDir = NULL, openMsDir = NULL, filter = "peakPicking true 1-", staggeredWindows = F, diaUmpireParams, cometParams, spectrastParams, libType = "consensus",updateLib = FALSE, irt_file = NULL, threads = detectCores()) {
+create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = NULL, tppDir = NULL, openMsDir = NULL, filter = "peakPicking true 1-", staggeredWindows = F, diaUmpireParams = NULL, cometParams = NULL, spectrastParams = NULL, libType = "consensus", updateLib = FALSE, irt_file = NULL, threads = detectCores()) {
 
 
+  find.params = function(params, paramsName, str) {
+    if(is.null(params)) {
+      warning(str_c("Argument '", paramsName, "' is missing. Searching for default parameter file...may take a few seconds...", "\n"))
+      params = system2("where", args = c("/r", "C:\\", str), stdout = T)
+      if(str_detect(params, str)) {
+        print(str_c("Found default parameter file..."))
+      } else {
+        stop(str_c("Could not auto-detect the default parameter file. Please add path to this file using argument '", paramsName, "'"))
+      }
+    } else if(file.exists(params)){
+      print(str_c("Using parameters file: ", params))
+    } else {
+      stop(str_c("Arg - '", paramsName,"'. File does not exist!"))
+    }
+    params
+  }
   if(!updateLib) {
     if(!dir.exists(projectFolder)) {
       pass = dir.create(projectFolder)
@@ -87,6 +103,9 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
   if(!(libType == "consensus" | libType == "best_replicate")) {
     stop("Invalid arg - libType. Possible values are 1) 'consensus' or 2) 'best_replicate'")
   }
+  cometParams = find.params(cometParams, paramsName = "cometParams", str = "comet_mslibrarian_default.params")
+  diaUmpireParams = find.params(diaUmpireParams, paramsName = "diaUmpireParams", str = "diaumpire_se_mslibrarian_default.params")
+  spectrastParams = find.params(spectrastParams, paramsName = "spectrastParams", str = "spectrast_create_mslibrarian_default.params")
   if(!updateLib) {
     if(all(str_detect(diaFiles, pattern = ".raw$"))) {
 
@@ -100,12 +119,12 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
       dir.create(file.path(projectFolder, "dia"))
       outputFolder = file.path(projectFolder, "dia")
       print(str_c("Creating output folder: ", outputFolder))
-      run.msconvert(msConvertPath = msConvert,
-                    rawFiles = diaFiles, # msConvertPath = msConvert
-                    format = "--mzXML",
-                    filter = filter,
-                    output = outputFolder,
-                    threads = threads)
+      msConvert = run.msconvert(msConvertPath = msConvert,
+                                rawFiles = diaFiles, # msConvertPath = msConvert
+                                format = "--mzXML",
+                                filter = filter,
+                                output = outputFolder,
+                                threads = threads)
       diaFiles = list.files(outputFolder, pattern = ".mzXML", full.names = T)
       toc()
     }
@@ -128,7 +147,8 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
     }
     print("Preparing for Comet search...")
     tic()
-    run.msconvert(rawFiles = list.files(outputFolder, pattern = ".mgf$", full.names = T),
+    run.msconvert(msConvertPath = msConvert,
+                  rawFiles = list.files(outputFolder, pattern = ".mgf$", full.names = T),
                   format = "--mzXML",
                   filter = "",
                   output = outputFolder,

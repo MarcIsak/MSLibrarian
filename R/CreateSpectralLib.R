@@ -9,7 +9,7 @@
 #' @param saveObj Determines whether a MSLibrarian object will be saved. Possible values are "TRUE" or "FALSE" (default)
 #' @export create.spectral.lib
 
-create.spectral.lib <- function(calibrationLib = NULL, projectFolder = NULL, msFile = NULL, fasta, outputLib = NULL, format = "spectronaut", ceMode = "length_only", threads = detectCores(), saveObj = F) {
+create.spectral.lib <- function(calibrationLib = NULL, projectFolder = NULL, msFile = NULL, fasta, outputLib = NULL, format = "spectronaut", ceMode = "charge", threads = detectCores(), saveObj = F) {
 
   if(!is.null(projectFolder) & is.null(calibrationLib)) {
     calibrationLib = file.path(projectFolder, "library", "calibration_lib.RData")

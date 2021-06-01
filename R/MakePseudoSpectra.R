@@ -20,9 +20,10 @@ make.pseudo.spectra <- function(msConvertPath, mzmlFiles, format, diaUmpireParam
 
   }
   if(is.null(msConvertPath)) {
-    msConvertPath = system2("where", args = c("/r", shQuote("C:\\Program Files"), "msconvert.exe"), stdout = T)
+    warning(str_c("Argument 'msConvertPath' is missing. Trying to auto-detect the MSconvert executable...may take a few seconds..."))
+    msConvertPath = system2("where", args = c("/r", "C:\\", "msconvert.exe"), stdout = T)
     msConvertPath = msConvertPath[grep("ProteoWizard", msConvertPath)]
-    if(length(msConvertPath) == 1) {
+    if(length(msConvertPath) == 1 & identical(basename(msConvertPath), "msconvert.exe")) {
       print("Found MsConvert executable...")
     } else {
       stop("Could not auto-detect the MsConvert executable. Please add path to executable (msConvert argument).")
