@@ -1,7 +1,7 @@
 #' Modifies and filters a spectral library on protein, peptide, or transition level. Also allows for changing library retention times.
 #' @param projectFolder path to a MSLibrarian project folder
-#' @param inputLib path to an input spectral library. If there is only one library, it will be selected automatically.
-#' @param outputLib desired path to a modified spectral library
+#' @param inputLib path to an input spectral library. If there is only one library, it will be selected automatically if arg - projectFolder is supplied.
+#' @param outputLib desired path to a modified spectral library. A default name is generated if not specified.
 #' @param calibrationLib path to a Calibration Library (*.RData format)
 #' @param mods character vector specifying the modifications to apply. c("protein", "peptide", "transitions", "rt")
 #' @param diaFiles path to DIA MS raw files used to build the calibration library
@@ -13,7 +13,7 @@
 #' @param cutoffTrans decimal number between 0 - 1 giving the minimum relative intensity that a transition can have (0.05 is default).
 #' @param topTrans maximum number of high intensity transitions to allow for each precursor in the library. (Is ignored/NULL by default)
 #' @param minTrans minimum number of transitions to allow for each precursor in a library.
-#' @param nCal decimal number giving the proportion of calibration library entries to use for RT calibration in DeepLC. (0.33 by default)
+#' @param nCal decimal number giving the proportion of calibration library entries to use for RT calibration in DeepLC. (0.25 by default)
 #' @param deepLcPath path to DeepLC GUI folder. It will try to auto-detect the folder if not supplied.
 #' @export mod.spectral.lib
 

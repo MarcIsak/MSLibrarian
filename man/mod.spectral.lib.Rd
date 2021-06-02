@@ -26,9 +26,9 @@ mod.spectral.lib(
 \arguments{
 \item{projectFolder}{path to a MSLibrarian project folder}
 
-\item{inputLib}{path to an input spectral library. If there is only one library, it will be selected automatically.}
+\item{inputLib}{path to an input spectral library. If there is only one library, it will be selected automatically if arg - projectFolder is supplied.}
 
-\item{outputLib}{desired path to a modified spectral library}
+\item{outputLib}{desired path to a modified spectral library. A default name is generated if not specified.}
 
 \item{calibrationLib}{path to a Calibration Library (*.RData format)}
 
@@ -52,7 +52,7 @@ mod.spectral.lib(
 
 \item{minTrans}{minimum number of transitions to allow for each precursor in a library.}
 
-\item{nCal}{decimal number giving the proportion of calibration library entries to use for RT calibration in DeepLC. (0.33 by default)}
+\item{nCal}{decimal number giving the proportion of calibration library entries to use for RT calibration in DeepLC. (0.25 by default)}
 
 \item{deepLcPath}{path to DeepLC GUI folder. It will try to auto-detect the folder if not supplied.}
 }
