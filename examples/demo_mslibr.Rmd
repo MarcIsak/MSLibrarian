@@ -1,0 +1,184 @@
+---
+title: "MSLibrarian Demo"
+author: "Marc Isaksson"
+date: "5/17/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+.libPaths("C:/Users/marc/Dropbox (Human Neural Develop)/Marc/MISTR/R/win-library/3.5") # Set your library path here if necessary...
+knitr::opts_chunk$set(echo = TRUE)
+library(MSLibrarian)
+library(tictoc)
+
+```
+
+## Introduction 
+
+In this workflow, we will use the R software package _MSLibrarian_ to create predicted spectral libraries for DIA proteomics analyses. MSLibrarian makes use of the DIA data at hand to incorporate calibrated predictions of both fragment ion intensities and retention times into the built spectral library. Apart from creating spectral libraries, it offers tools to manipulate existing spectral libraries on the protein, peptide and transition level. 
+
+## General parameters to set
+
+### Finding the DIA MS files 
+
+In the following demonstration, we will create a predicted spectral library for the DIA analysis of yeast MS runs. To get the paths to the yeast DIA runs in RAW format, we run the following command: 
+
+```{r dia-ms-files, eval = T}
+
+diaFolder = "Y:/imp_bioms/CK/mslibr_test/YeastDIA/"  # The folder with DIA MS files in RAW format
+
+diaFiles = list.files(diaFolder, pattern = ".raw$", full.names = T) # Extracts the paths to all raw files in the folder.
+diaFiles # prints the file names.
+
+```
+In this case, there are 11 DIA files that are present in the folder. For the demonstration, we will only make use of 6 of these files. 
+
+```{r dia-files-subset}
+
+diaFiles = diaFiles[1:4]
+
+```
+
+### Selecting a suitable FASTA file
+
+We also need to locate the path to a FASTA file to create a spectral library. In this example, we will use a FASTA file with yeast protein sequences in Uniprot format. The file path is saved into the variable _fasta_.
+
+```{r fasta}
+
+fasta = "D:/Databases/uniprot-filtered-proteome_UP000002311+AND+reviewed_yes+AND+organism__Sac_can.fasta"  # change to your FASTA!
+
+```
+
+### Adding a SQLite database with Prosit predictions:
+
+MSLibrarian makes use of SQLite databases with Prosit predictions of retention times and fragment ion intensities at different collision energies. These databases are available for download for some species, from the following SFTP...(**to be added**). Custom databases can also be created with some functions of MSLibrarian (see the section below: **Create a custom Prosit prediction database**)  
+
+In this example, we will use a SQLite prediction database for yeast sequences (_Saccharomyces cerevisiae_), that was created in MSLibrarian prior to this demonstration. We will save the file path to this prediction database into a variable called _predictionDb_:
+
+```{r prediction-db-path}
+
+predictionDb = "D:/Data_PROSIT/Libraries/Yeast/SQLITE/saccharomyces_cerevisiae_prositdb_2020.sqlite" # Change to your SQLite database!
+
+```
+
+### Defining a MSLibrarian project folder
+
+To run MSLibrarian, it is necessary to create a project folder where all processed files and spectral libraries will be located. In our example we will create a folder called **demo_mslibr_yeast** on the **D:/** drive of this computer. We save the path to the folder into variable project.
+
+```{r}
+
+project = "D:/demo_mslibr_yeast2"
+
+```
+
+## Creating the calibration library
+
+In this step, we will create a _MSLibrarian Calibration Library_, which is simply an experimental library that can be used to extract the optimal fragment ions intensities and calibrate the retention time predictions in a latter stage. The _Calibration Library_ is created by running the function _create.calibration.lib()_. The main steps of the function are 1) Create pseudo-dda MS/MS spectra with MSConvert, 2) identify spectra with Comet, 3) estimate confidence in PSMs with PeptideProphet and iProphet, 4) creation of a consensus spectral library with Spectrast and 5) output of peptide-query-parameters as a OpenSwath *.tsv with and OpenSwathAssayGenerator. 
+
+The mandatory parameters that need to be set are found in the code chunk below. There are many parameters which have defaults if not added. All arguments can be seen if running _?create.calibration.lib_. 
+
+style="color: red;">NB! Default parameter files will be found for arguments: diaUmpireParams, cometParams and spectrastParams if not provided. These parameter files are located in the MSLibrarian subfolder: **params**. It is imporant that the paths to the parameter files do not contain any spaces. In this case, there will be an error when creating the pseudo-DDA MS/MS spectra. If the file paths contain spaces, move the **params** folder to another directory on the **C:/**-drive whose path does not contain any spaces.</span>
+
+
+```{r create-calibration-library, eval=F}
+
+tic()
+create.calibration.lib(diaFiles = diaFiles,
+                       fasta = fasta,
+                       projectFolder = project)
+toc()
+
+# Takes 31 minutes. 
+```
+
+## Processing of the calibration library
+
+In the next step MSLibrarian can use the function _process.calibration.lib()_ to determine which collision energies that yield the highest spectral similarity between PROSIT predicted spectra and experimental spectra (in the Calibration library that was created). The main steps of _process.calibration.lib()_ are 1) Extract predictable precursors from the Calibration Library, 2) add Calibration library MS/MS information as Spectrum2 objects, 3) add predicted MS/MS information into Spectrum2 objects for precursors that match the precursors in the Calibration Library, 4) Spectral matching and dot product calculation. 5) Creation of a Calibration Library object with the spectral match results. 
+
+The mandatory arguments of process.calibration.lib() are shown in the code chunk. Other arguments have defaults that can be changed if necessary. To see all parameters, run ?process.calibration.lib in the console. 
+
+style="color: red;">NB! It is important to add the correct character to **arg: rt**.If a file with indexed retention times were added to arg: irt_file of the _create.calibration.lib()_ function, the arg: rt of the _process.calibration.lib()_ function should be set to "irt". If no irt_file argument was provided, the rt argument should be set to "sec".</span>
+
+
+```{r process-calibration-library, eval=F}
+
+tic()
+process.calibration.lib(projectFolder = project,
+                        predictionDb = predictionDb,
+                        rt = "sec")
+toc()
+
+# Takes only 9 minutes to run this process. 
+
+```
+
+## Creation of a full predicted spectral library 
+
+In the previous step, predicted spectra was matched to corresponding experimental spectra and the dot product was calculated for each match. Since the dot products are known for each match at every collision energy in the range 20 - 40, it is possible to extract the optimal collision energies prior to spectral library creation. Still, the optimal collision energies for fragment ion intensity predictions, will depend on the binning of precursors. For instance, the optimal collision energy can be calculated for precursors of a certain length and charge state. Or the collision energy can be calculated for all precursors of a certain charge state, irregardless of the length. 
+
+By running the function _create.spectral.lib()_, we can create a spectral library for all predictable precursors resulting from an in-silico digest of a full proteome sequence FASTA file. The argument _ceMode_ allows us to select how the optimal collision energies should be calculated. By default _ceMode_= "charge", meaning that the optimal collision energy will be estimated for precursors of the same charge. In this case, the optimal collision energy will be estimated for charge state 2 and 3 respectively. This default is a good alternative since it does not require the calibration library to be large. In case of a large library, ceMode could be set to "length_charge" which would bin precursors according to both length and charge, and a optimal collision energy would be calculated for each precursor bin. 
+
+The mandatory arguments to the create.spectral.lib are seen in the code chunk below. Other arguments have defaults, and they might need to be changed depending on the use case. To get more information about the arguments, type _?create.spectral.lib_. 
+
+
+```{r develop-function, eval = F}
+tic()
+create.spectral.lib(projectFolder = project,
+                    fasta = fasta, 
+                    format = "openswath")
+toc()
+
+# The process takes 4 minutes. That is OK!
+# Must save the MSLibrarian object as an RData file. But the outputLib arg must be returned from export.spectral.lib
+# 
+
+```
+
+After running this function, a predicted spectral library (Jun_02_10_12_42_2021_mslibrarian_ce_charge_irt_prosit.csv) in Spectronaut can be found in the library folder (D:/demo_mslibr_yeast2/library/). Every predictable precursor having charge state 2 or 3 in the yeast proteome is a target in this library. 
+
+## Modify an existing spectral library 
+
+As mentioned in the previous section, the output from the _create.spectral.lib()_ function is a complete spectral library of every precursor in the yeast proteome having a charge state of 2 or 3. In reality, it is very unlikely that every predictable precursor for every yeast protein is present in the samples that will be analyzed. This mismatch between search space (library targets) and target space (sample targets) can result in FDR issues on precursor, peptide and protein level. Also, there may be many low intensity transitions in the predicted library that are unlikely to be present in a corresponding experimental library. 
+
+The MSLibrarian function _mod.spectral.lib()_, allows us to subset a complete library on the protein level (argument _mods=c("protein")_). Protein level subset can be done by selecting targets with Uniprot IDs only found in the Calibration Library that was created earlier 
+( _protMod="calibrationlibrary"_ ). Also, the DIA software DIA-NN can be used to subset the library on the protein level by performing a first pass search of the full spectral library. Based on the protein groups identified by DIA-NN at a set protein group FDR cutoff (argument _protFdr=0.2_ by default), a new spectral library will be filtered to only contains targets belonging those protein groups and written to a new file. The third option is to input a character vector with Uniprot accessions. Then the library will be subsetted to only have targets for those proteins/protein groups (for instance: _protMod=c("Q66K14", "Q14166", ...))
+
+Also, the function allows for subsetting a library on the peptide level ( _mods=c("peptide")_ ). For this purpose, the high responding peptide predictor algorithm PREGO is used. It ranks all peptides for each protein in a library, from highest to lowest responding peptide. Then, a fixed number of top high responding peptides can be selected for each protein group (argument _topPept_). If the number of top high responding peptides is set to 8, there will only be a maximum of 8 peptide sequences for each protein group in the library. 
+
+A third modification that can be applied to a spectral library is transition filtering ( _mods=c("transition")_ ). This filter can be run to filter transitions based on the top most intense transitions for each target (argument _topTrans_). Also transitions having a relative intensity less than a certain cutoff value can be removed (argument _cutoffTrans_ where intensities are in the range 0 - 1). A third filter is the minimum transitions filter, which removes library entries having as many or less than a certain value (argument _minTrans_). If the filter is set to 4, all library targets with 4 or less than 4 transitions will be removed.
+
+The fourth and final modification that can be applied to a spectral library is the replacement of retention times (RT) from the original Prosit iRT values to retention times predicted by DeepLC. The benefit of using DeepLC-predicted RTs is the possibility to calibrate the predictions with peptide sequences for which the RTs are known. These calibration peptides can be taken from the Calibration library that we built using the _create.calibration.lib()_ function. 
+
+In the example below, we will create a subset library from a full yeast-proteome spectral library(Jun_02_10_12_42_2021_mslibrarian_ce_charge_irt_prosit.tsv) that has been filtered on the protein level with DIA-NN, the transition level where the there must be at least 5 transitions per target having a relative intensity above 0.05. Also, the Prosit RT values will be changed to DeepLC retention times. The mandatory parameters are shown below. 
+
+```{r modify-spectral-library, eval = F}
+tic()
+mod.spectral.lib(projectFolder = project,
+                 inputLib = "D:/demo_mslibr_yeast2/library/Jun_02_10_12_42_2021_mslibrarian_ce_charge_irt_prosit.tsv",
+                 mods = c("protein", "transition", "rt"), 
+                 protMod = "diann",
+                 cutoffTrans = 0.05, 
+                 minTrans = 5,
+                 diaFiles = diaFiles)
+toc()
+
+```
+The subset library (Jun_02_10_12_42_2021_mslibrarian_ce_charge_rt_deeplc_0.25_protein_filter_diann_cutoff_0.05_trans_5.tsv) in this example has been written to the same folder as the input library. It has less than half the size of the input library. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
