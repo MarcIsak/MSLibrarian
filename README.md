@@ -18,6 +18,7 @@ To run MSLibrarian, the following softwares/pipelines must be installed on the *
  * [**OpenMS version 2.5.0**](https://github.com/OpenMS/OpenMS/releases/tag/Release2.6.0) or higher
  * [**PREGO**](https://bitbucket.org/searleb/prego-srm-response-predictor/downloads/) 
  * [**DeepLC GUI v0.1.29**](https://github.com/compomics/DeepLC/releases) or higher. _Follow the installation guide to setup the miniconda environment._
+ * [**DIA-NN v.17.12**](https://github.com/vdemichev/DiaNN/releases/tag/1.7.12)
 
 ## Getting started 
 
