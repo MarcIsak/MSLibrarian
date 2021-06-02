@@ -20,7 +20,7 @@
 mod.spectral.lib <- function(projectFolder = NULL, inputLib = NULL, outputLib = NULL, calibrationLib = NULL, mods, diaFiles, protMod, protFdr = 0.2, diannPath = NULL, topPept = NULL, pregoPath = NULL, cutoffTrans = NULL, topTrans = NULL, minTrans = NULL, nCal = 0.25, deepLcPath = NULL) {
 
   if(!is.null(projectFolder) & is.null(calibrationLib)) {
-    calibrationLib = file.path(projectFolder, "library", "calibration_lib_consensus.RData")
+    calibrationLib = file.path(projectFolder, "library", "calibration_lib.RData")
     if(!dir.exists(projectFolder)) {
       stop("Project folder does not exist!")
     } else if(!file.exists(calibrationLib)) {
