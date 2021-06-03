@@ -12,12 +12,22 @@ make.prosit.csv <- function(fasta, chargeRange, ceRange, prefix, outputFolder, t
   print("Load FASTA...")
   msLib = read.fasta(fasta)
   Sys.sleep(2)
-  msLib = digest.proteins.tmp(msLib = msLib, rowStr = "Accession", enzyme = "trypsin", maxMissed = 0, carbamidomethyl = T, threads = threads)
+  msLib = digest.proteins(msLib = msLib,
+                          rowStr = "Accession",
+                          enzyme = "trypsin",
+                          maxMissed = 0,
+                          carbamidomethyl = T,
+                          threads = threads)
   print("Filter peptides...")
-  msLib = filter.peptides.tmp(msLib = msLib, AALengthRange = c(7, 30), rejectAAs = c("U", "O", "B", "J", "X", "Z"), mzRange = c(0, Inf), chargeRange = chargeRange)
-  msLib = prego.rank(msLib, pregoPath = "C:/Program Files/PREGO/classify.exe", threads = 6)
-  msLib = top.prego.peptides(msLib, n = Inf)
-  msLib = get.precursors(msLib = msLib, mzRange = c(0, Inf), chargeRange = chargeRange, matchDb = F)
+  msLib = filter.peptides.tmp(msLib = msLib,
+                              AALengthRange = c(7, 30),
+                              rejectAAs = c("U", "O", "B", "J", "X", "Z"),
+                              mzRange = c(0, Inf),
+                              chargeRange = chargeRange)
+  msLib = get.precursors(msLib = msLib,
+                         mzRange = c(0, Inf),
+                         chargeRange = chargeRange,
+                         matchDb = F)
 
   print("Preparing for writing files...")
 
