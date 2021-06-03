@@ -10,7 +10,7 @@ A recommendation is to use a computer with at least 32 GB RAM to avoid issues du
 
 ### Software 
 
-To run MSLibrarian, the following softwares/pipelines must be installed on the **C:/**-drive: 
+To run MSLibrarian, the following softwares/pipelines **must** be installed on the **C:/**-drive
 
  * [**R version 4.0.0**](https://cran.r-project.org/) or higher. 
  * [**Proteowizard suite version 3.0.20365**](http://proteowizard.sourceforge.net/download.html) or higher 
