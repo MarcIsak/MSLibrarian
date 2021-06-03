@@ -49,15 +49,15 @@ get.precursors = function(msLib, mzRange,chargeRange, matchDb, threads) {
   print("Calculating m/z values...")
   protonMass = 1.007276499879 # Mass of a proton in Da
   precursors$precursor_mz = apply(precursors[,c("precursor_mass", "precursor_charge")], 1, get.mz.vals, protonMass)
+  print(str_c("Number of unique precursors: ", nrow(precursors)))
   if(matchDb){
     print("Database matching enabled...")
     print("Adding prediction indices...")
     precursors$predIdx = as.vector(as.matrix(predIdx))
     predictable = !is.na(precursors$predIdx)
+    print(str_c("Number of unique predictable precursors: ", sum(predictable), " (", round(sum(predictable)*100/nrow(precursors), 2), "% )"))
+    precursors = precursors[predictable,]
   }
-  print(str_c("Number of unique precursors: ", nrow(precursors)))
-  print(str_c("Number of unique predictable precursors: ", sum(predictable), " (", round(sum(predictable)*100/nrow(precursors), 2), "% )"))
-  precursors = precursors[predictable,]
   precursors$mz_pass = precursors$precursor_mz >= min(mzRange) & precursors$precursor_mz <= max(mzRange)
   msLib@Sequences@Precursors$Unique = precursors
   msLib@Sequences@Precursors$MzPass = precursors[precursors$mz_pass,-which(grepl("mz_pass", colnames(precursors)))]
