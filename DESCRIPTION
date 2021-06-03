@@ -23,4 +23,5 @@ Depends: Biostrings,
          dplyr,
          tools,
          data.table,
-         vroom
+         vroom,
+         tictoc
