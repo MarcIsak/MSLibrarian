@@ -27,7 +27,8 @@ make.prosit.csv <- function(fasta, chargeRange, ceRange, prefix, outputFolder, t
   msLib = get.precursors(msLib = msLib,
                          mzRange = c(0, Inf),
                          chargeRange = chargeRange,
-                         matchDb = F)
+                         matchDb = F,
+                         threads = threads)
 
   print("Preparing for writing files...")
 
