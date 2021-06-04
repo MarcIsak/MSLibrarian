@@ -24,4 +24,5 @@ Depends: Biostrings,
          tools,
          data.table,
          vroom,
-         tictoc
+         tictoc,
+         doParallel
