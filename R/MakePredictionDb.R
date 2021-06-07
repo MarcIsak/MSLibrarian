@@ -2,26 +2,45 @@
 #' @param prediction_folder output folder where the predicted spectral library files will be processed and stored
 #' @param task_id text file with input prosit csv file names and their respective task ids
 #' @param sqlite preferred name of the SQLite database *.sqlite (It will be added to a subfolder called SQLite in the set prediction_folder)
+#' @param download should files in the taskid.txt file be downloaded
 #' @param threads number of parallel downloads to perform
 #' @export make.prediction.db
 
-make.prediction.db <- function(prediction_folder, task_id, sqlite, threads) {
+make.prediction.db <- function(prediction_folder, task_id, sqlite, download = T,threads) {
   tic()
-  print(str_c("Downloading predicted spectral libraries to: ", prediction_folder))
-  task_id = read_delim(task_id, delim = "\t")
-  cl = parallel::makeCluster(threads)
-  clusterEvalQ(cl, .libPaths("C:/Users/marc/Dropbox (Human Neural Develop)/Marc/MISTR/R/win-library/3.5"))
-  doParallel::registerDoParallel(cl)
-  foreach(i = 1:nrow(task_id), .packages = "utils") %dopar% {
-    url = str_c("https://www.proteomicsdb.org/prosit/api/download.xsjs?datasetId=", task_id$task_id[i])
-    destFile = str_c(prediction_folder, task_id$pred_file[i],".zip")
+  prosit.download <- function(id) {
+    url = str_c("https://www.proteomicsdb.org/prosit/api/download.xsjs?datasetId=", id["task_id"])
+    destFile = str_c(prediction_folder, id["pred_file"],".zip")
     download.file(url = url,
                   mode = "wb",
-                  method = "wininet",
-                  destfile = destFile) # this code works and it renames files accordingly...
+                  destfile = destFile,
+                  cacheOK = F) # this code works and it renames files accordingly...
   }
-  stopCluster(cl)
-  gc(full = T)
+  task_id = read_delim(task_id, delim = "\t")
+  if(download) {
+    options(timeout = 180)
+    print(str_c("Downloading predicted spectral libraries to: ", prediction_folder))
+    apply(task_id, 1, prosit.download)
+  }
+  # cl = parallel::makeCluster(threads)
+  # clusterEvalQ(cl, {
+  #   .libPaths(.libPaths())
+  #   library(utils)
+  #   library(stringr)
+  # })
+  #doParallel::registerDoParallel(cl)
+  #parApply(cl, task_id, 1,prosit.download)
+
+  # foreach(i = 1:nrow(task_id), .packages = "utils") %dopar% {
+  #   url = str_c("https://www.proteomicsdb.org/prosit/api/download.xsjs?datasetId=", task_id$task_id[i])
+  #   destFile = str_c(prediction_folder, task_id$pred_file[i],".zip")
+  #   download.file(url = url,
+  #                 mode = "wb",
+  #                 destfile = destFile, cacheOK = F) # this code works and it renames files accordingly...
+  # }
+  # print(getOption('timeout'))
+  # stopCluster(cl)
+  # gc(full = T)
   # for (i in 1:nrow(task_id)) {
   #   url = str_c("https://www.proteomicsdb.org/prosit/api/download.xsjs?datasetId=", task_id$task_id[i])
   #   destFile = str_c(prediction_folder, task_id$pred_file[i],".zip")

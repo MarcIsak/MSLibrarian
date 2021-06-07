@@ -4,7 +4,7 @@
 \alias{make.prediction.db}
 \title{Creates a predicted spectral library database}
 \usage{
-make.prediction.db(prediction_folder, task_id, sqlite, threads)
+make.prediction.db(prediction_folder, task_id, sqlite, download = T, threads)
 }
 \arguments{
 \item{prediction_folder}{output folder where the predicted spectral library files will be processed and stored}
@@ -12,6 +12,8 @@ make.prediction.db(prediction_folder, task_id, sqlite, threads)
 \item{task_id}{text file with input prosit csv file names and their respective task ids}
 
 \item{sqlite}{preferred name of the SQLite database *.sqlite (It will be added to a subfolder called SQLite in the set prediction_folder)}
+
+\item{download}{should files in the taskid.txt file be downloaded}
 
 \item{threads}{number of parallel downloads to perform}
 }

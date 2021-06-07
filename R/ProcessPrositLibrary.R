@@ -14,9 +14,10 @@ process.prosit.lib <- function(zipfile, noZeroIntensity, transitionFilter, trans
   add.idx <- function(libList, offsetIdx) {
 
     cols = "StrippedPeptide|LabeledPeptide|PrecursorMz|iRT|PrecursorCharge"
-    startIdx = which(libList$FragmentNumber == 1 &
-                       libList$FragmentType == "y" &
-                       libList$FragmentCharge == 1)
+    startIdx = which(!duplicated(str_c(libList$LabeledPeptide, "_", libList$PrecursorCharge)))
+    # startIdx = which(libList$FragmentNumber == 1 &
+    #                    libList$FragmentType == "y" &
+    #                    libList$FragmentCharge == 1)
     outList = libList[startIdx, grep(cols, colnames(libList))]
     outList$startIdx = startIdx + offsetIdx[i]
     outList$endIdx = c(outList$startIdx[2:length(outList$startIdx)]-1, nrow(libList) + offsetIdx[i])
@@ -24,17 +25,11 @@ process.prosit.lib <- function(zipfile, noZeroIntensity, transitionFilter, trans
     outList
   }
   print("Importing Prosit spectral library...")
-  # myPrositLib = read_csv(zipfile)
-  # myPrositLib = as.data.frame(myPrositLib, stringsAsFactors = F)
-  myPrositLib = as.data.frame(vroom(zipfile), stringsAsFactors = F)
+  myPrositLib = as.data.frame(read_csv(zipfile), stringsAsFactors = F)
   gc(full = T)
   if(noZeroIntensity) {
     print("Removing ALL transitions with intensities equal to zero...")
-    myPrositLib = myPrositLib[-which(myPrositLib$RelativeIntensity == 0 &
-                                       !(myPrositLib$FragmentCharge == 1 &
-                                           myPrositLib$FragmentType == "y" &
-                                           myPrositLib$FragmentNumber == 1)),]
-
+    myPrositLib = myPrositLib[-which(myPrositLib$RelativeIntensity == 0),]
     row.names(myPrositLib) = 1:nrow(myPrositLib)
     gc(full = T)
   }
