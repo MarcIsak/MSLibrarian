@@ -63,8 +63,6 @@ make.prediction.db <- function(prediction_folder, task_id, sqlite, download = T,
     print(paste("Library to be processed:", filename))
     process.prosit.lib(zipfile = filename, # Could vroom speed up this process perhaps?
                        noZeroIntensity = F,
-                       transitionFilter = F,
-                       transitionThreshold = 1,
                        output = str_replace(filename, pattern = ".zip", replacement = ".RData"))
     gc(full = T)
     toc()
