@@ -41,7 +41,7 @@ filter.proteins <- function(inputLib = NULL, outputLib = NULL, type = NULL, cali
     str = "diann"
   } else if(class(type) == "character" & length(type) >= 1 & all(unique(nchar(type)) == 6 | unique(nchar(type)) == 10)) {
     print("Use a customized set of protein IDs to subset library...") # THIS IS NOT OPTIMAL. MUST BE MORE WAYS TO CHECK THAT THE INPUT IS UNIPROT IDENTIFIERS.
-    proteinId = type
+    proteinIds = type
     str = "custom"
   } else {
     stop("Arg - type. Invalid value provided. Run '?filter.proteins' in console to see valid values.")
