@@ -77,7 +77,7 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
     interact = file.path(tppDir, "bin", "InteractParser.exe")
     peptideProphet = file.path(tppDir, "bin", "PeptideProphetParser.exe")
     interProphet = file.path(tppDir, "bin", "InterProphetParser.exe")
-    spectrast = file.path(spectrast, "bin", "spectrast.exe")
+    spectrast = file.path(tppDir, "bin", "spectrast.exe")
     if(!(file.exists(comet) & file.exists(interact) & file.exists(peptideProphet) & file.exists(interProphet) & file.exists(spectrast))) {
       stop("Cannot find all TPP executables in TPP installation folder: InteractParser, PeptideProphet and InterProphet!")
     }
