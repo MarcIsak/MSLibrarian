@@ -17,7 +17,8 @@ To run MSLibrarian, the following softwares/pipelines **must** be installed on t
  * [**Trans-proteomic pipeline version 5.2.0**](https://sourceforge.net/projects/sashimi/files/Trans-Proteomic%20Pipeline%20%28TPP%29/) or higher
  * [**OpenMS version 2.5.0**](https://github.com/OpenMS/OpenMS/releases/tag/Release2.6.0) or higher
  * [**PREGO**](https://bitbucket.org/searleb/prego-srm-response-predictor/downloads/) 
- * [**DeepLC GUI v0.1.29**](https://github.com/compomics/DeepLC/releases) or higher. _Follow the installation guide to setup the miniconda environment._
+ * [**DeepLC GUI v0.1.29**](https://github.com/compomics/DeepLC/releases) or higher._Follow the installation guide to setup the miniconda environment._ 
+  As an alternative to the **GUI**, the [**DeepLC CLI (.exe)**] can be installed instead. 
  * [**DIA-NN v.17.12**](https://github.com/vdemichev/DiaNN/releases/tag/1.7.12). Currently the most recent version, but older version should also work. 
 
 ## Getting started 
