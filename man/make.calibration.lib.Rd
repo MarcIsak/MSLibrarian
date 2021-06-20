@@ -9,7 +9,7 @@ make.calibration.lib(
   oswGenPath,
   prophetFile,
   libType,
-  irt_file,
+  irt,
   spectrastParams,
   output
 )
@@ -23,7 +23,7 @@ make.calibration.lib(
 
 \item{libType}{Type of spectral library to build. Possible values are 1) 'Consensus' and 2) 'Best replicate'"}
 
-\item{irt_file}{input file with irt values associated to every peptide sequence}
+\item{irt}{input file with irt values associated to every peptide sequence}
 
 \item{spectrastParams}{input Spectrast parameters file}
 

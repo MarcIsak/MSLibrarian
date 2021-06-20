@@ -12,11 +12,11 @@
 #' @param spectrastParams *path to a spectrast parameters file with parameters for creation of a spectral library.
 #' @param libType Type of library to build. Possible values are 1) 'consensus' (default) and 2) 'best_replicate'
 #' @param updateLib logical indicating if the created library should be updated. Will in this case re-run Spectrast and OpenSwathAssayGenerator to make a new library.
-#' @param irt_file path to a tab-delimited text file with sequences in the first column and corresponding iRT values in the second column. Used for Spectrast library creation.
+#' @param irt Can either be set to "biognosys_irt" or NULL (default). If set to "biognosys_irt", the calibration library retention times will be converted to iRT values.
 #' @param threads Number of threads or parallel processes to use. Will by default use all available logical processors.
 #' @export create.calibration.lib
 
-create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = NULL, tppDir = NULL, openMsDir = NULL, filter = "peakPicking true 1-", staggeredWindows = F, diaUmpireParams = NULL, cometParams = NULL, spectrastParams = NULL, libType = "consensus", updateLib = FALSE, irt_file = NULL, threads = detectCores()) {
+create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = NULL, tppDir = NULL, openMsDir = NULL, filter = "peakPicking true 1-", staggeredWindows = F, diaUmpireParams = NULL, cometParams = NULL, spectrastParams = NULL, libType = "consensus", updateLib = FALSE, irt = NULL, threads = detectCores()) {
 
 
   find.params = function(params, paramsName, str) {
@@ -186,6 +186,6 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
                        libType = libType,
                        spectrastParams = spectrastParams,
                        output = file.path(outputFolder, "calibration_lib.tsv"), # output = "D:/MS_files/MSLibrarian_DIA_test/brian_searle/calibration_lib/calibration_lib_dia.tsv",
-                       irt_file = irt_file) # No irt file used...
+                       irt = irt) # No irt file used...
   toc()
 }

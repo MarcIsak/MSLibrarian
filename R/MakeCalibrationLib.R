@@ -3,12 +3,12 @@
 #' @param oswGenPath absolute path to the OpenMS binary folder
 #' @param prophetFile absolute path to the iProphet results file
 #' @param libType Type of spectral library to build. Possible values are 1) 'Consensus' and 2) 'Best replicate'"
-#' @param irt_file input file with irt values associated to every peptide sequence
+#' @param irt input file with irt values associated to every peptide sequence
 #' @param spectrastParams input Spectrast parameters file
 #' @param output Desired output file name of OpenSwath library
 #' @export make.calibration.lib
 
-make.calibration.lib <- function(spectrastPath, oswGenPath, prophetFile, libType, irt_file, spectrastParams, output) {
+make.calibration.lib <- function(spectrastPath, oswGenPath, prophetFile, libType, irt, spectrastParams, output) {
 
   if(libType == "consensus") {
     libMode = "-cAC"
@@ -19,19 +19,33 @@ make.calibration.lib <- function(spectrastPath, oswGenPath, prophetFile, libType
   } else {
     print("Invalid library type. Possible values are 1) 'Consensus' and 2) 'Best replicate'")
   }
-  if(is.null(irt_file)) {
+  if(is.null(irt)) {
+    print("No iRT file provided...")
     irt = NULL
+  } else if(irt == "biognosys_irt"){
+    print("Library retention times will be converted to Biognosys iRT values...")
+    write_delim(data.frame(sequence = c("LGGNEQVTR", "GAGSSEPVTGLDAK", "VEATFGVDESNAK", "YILAGVENSK",
+                                        "TPVISGGPYEYR", "TPVITGAPYEYR", "DGLDAASYYAPVR", "ADVTPADFSEWSK",
+                                        "GTFIIDPGGVIR", "GTFIIDPAAVIR", "LFLQFGAQGSPFLK"),
+                           iRT = c(-24.916114, 0, 12.3893748888888, 19.7879106666667,
+                                   28.7145812222221, 33.381243, 42.2638884444446, 54.621042, 70.5187413333333,
+                                   87.2332223333333, 100.002821666667)),
+                file = file.path(dirname(prophetFile), "irt_biognosys.txt"),
+                delim = "\t",
+                col_names = F)
+    irt = str_c("-c_IRT", file.path(dirname(prophetFile), "irt_biognosys.txt"))
   } else {
-    irt = str_c("-c_IRT", irt_file)
+    print("invalid argument irt...will ignore this parameter...")
+    irt = NULL
   }
-  if(!file.exists(str_replace(prophetFile, ".pep.xml$", ".splib"))) {
-    print("Creating Spectrast library in SPLIB format")
-    system2(spectrastPath, # str_c(tppPath, "spectrast.exe")
-            args = c(str_c("-cN", str_remove(prophetFile, pattern = ".pep.xml")),
-                     irt,
-                     str_c("-cF", spectrastParams),
-                     prophetFile))
-  }
+  #if(!file.exists(str_replace(prophetFile, ".pep.xml$", ".splib"))) {
+  print("Creating Spectrast library in SPLIB format")
+  system2(spectrastPath, # str_c(tppPath, "spectrast.exe")
+          args = c(str_c("-cN", str_remove(prophetFile, pattern = ".pep.xml")),
+                   irt,
+                   str_c("-cF", spectrastParams),
+                   prophetFile))
+  #}
   splibFile = str_replace(prophetFile, ".pep.xml$", ".splib")
   print(str_c("Found Spectrast library: ", splibFile))
   print(str_c("Library build action: ", libType))

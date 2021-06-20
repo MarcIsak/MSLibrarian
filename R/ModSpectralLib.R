@@ -96,7 +96,7 @@ mod.spectral.lib <- function(projectFolder = NULL, inputLib = NULL, outputLib = 
     replace.rts(inputLib = inputLib,
                 calibrationLib = calibrationLib,
                 nCal = nCal,
-                replace = T,
+                replace = replace,
                 deeplc = deepLcPath)
     replace = T
   }

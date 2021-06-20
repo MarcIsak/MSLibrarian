@@ -80,7 +80,7 @@ filter.transitions <- function(inputLib = NULL, outputLib = NULL, topTrans = NUL
   endIdx = as.integer(c(startIdx[2:length(startIdx)] - 1, length(relativeIntensity)))
   pass = NULL
   if(!is.null(topTrans)) {
-    topNValid = topTrans == floor(topTrans) & topN == ceiling(topTrans) & topTrans >= 1
+    topNValid = topTrans == floor(topTrans) & topTrans == ceiling(topTrans) & topTrans >= 1
     if(topNValid) {
       print(str_c("Selecting top ", topTrans, " most intense transitions for each precursor..."))
       cl = parallel::makeCluster(threads)

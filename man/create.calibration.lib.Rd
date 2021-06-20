@@ -18,7 +18,7 @@ create.calibration.lib(
   spectrastParams = NULL,
   libType = "consensus",
   updateLib = FALSE,
-  irt_file = NULL,
+  irt = NULL,
   threads = detectCores()
 )
 }
@@ -49,7 +49,7 @@ create.calibration.lib(
 
 \item{updateLib}{logical indicating if the created library should be updated. Will in this case re-run Spectrast and OpenSwathAssayGenerator to make a new library.}
 
-\item{irt_file}{path to a tab-delimited text file with sequences in the first column and corresponding iRT values in the second column. Used for Spectrast library creation.}
+\item{irt}{Can either be set to "biognosys_irt" or NULL (default). If set to "biognosys_irt", the calibration library retention times will be converted to iRT values.}
 
 \item{threads}{Number of threads or parallel processes to use. Will by default use all available logical processors.}
 }

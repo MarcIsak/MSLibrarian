@@ -32,7 +32,8 @@ run.deeplc <- function(inputFolder, splitCal = 50, minDivider = 10, maxDivider =
                                          "--dict_divider",
                                          minDivider,
                                          "--dict_divider",
-                                         maxDivider))
+                                         maxDivider),
+            wait = T)
   }
   if(threads > 8) {
     threads = 8
@@ -46,7 +47,7 @@ run.deeplc <- function(inputFolder, splitCal = 50, minDivider = 10, maxDivider =
       lapply(c(file.path(inputFolder, "deeplc_lib.csv"),
                file.path(inputFolder, "deeplc_bench.csv")),
              execute.deeplc,
-             activate = file.path(deeplcPath, "Miniconda3/Scripts/activate.bat"),
+             activate = activate,
              file.path(inputFolder, "deeplc_calib.csv"),
              threads,
              splitCal,
@@ -63,7 +64,7 @@ run.deeplc <- function(inputFolder, splitCal = 50, minDivider = 10, maxDivider =
         lapply(c(file.path(inputFolder, "deeplc_lib.csv"),
                  file.path(inputFolder, "deeplc_bench.csv")),
                execute.deeplc,
-               activate = deeplc,
+               activate = activate,
                file.path(inputFolder, "deeplc_calib.csv"),
                threads,
                splitCal,
