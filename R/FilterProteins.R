@@ -102,6 +102,7 @@ filter.proteins <- function(inputLib = NULL, outputLib = NULL, type = NULL, cali
     print(str_c("Unique protein groups in DIA-NN report after filtering: ", length(unique(proteinIds))))
     proteinIds = unique(unlist(str_split(proteinIds, ";")))
     proteinIds = str_remove(str_remove(proteinIds, "sp\\||tr\\|"), "\\|.*")
+    outputLib = str_replace(outputLib, "_diann", str_c("_diann_", round(fdr, 2)))
   }
   protein.filter(inputLib = inputLib, outputLib = outputLib, proteinIds = proteinIds)
   if(remove) {
