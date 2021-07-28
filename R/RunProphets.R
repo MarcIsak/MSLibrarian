@@ -2,12 +2,12 @@
 #' @param interactPath Absolute path to the interactparser.exe
 #' @param peptideProphetPath Absolute path to the peptideprophetparser.exe
 #' @param interProphetPath Absolute path to the interprophetparser.exe
-#' @param cometFiles input Comet database search result files (pepXML)
+#' @param searchFiles input Comet database search result files (pepXML)
 #' @param output Absolute path to the desired output folder
 #' @param threads integer giving the number of threads to use
 #' @export run.prophets
 
-run.prophets <- function(interactPath, peptideProphetPath, interProphetPath, cometFiles, output, threads) {
+run.prophets <- function(interactPath, peptideProphetPath, interProphetPath, searchFiles, output, threads) {
 
   decoy = "DECOY=DECOY"
   threads = str_c("THREADS=", threads)
@@ -17,7 +17,7 @@ run.prophets <- function(interactPath, peptideProphetPath, interProphetPath, com
   print("Merging Comet output files...")
   system2(interactPath, # str_c(tppPath, "InteractParser.exe")
           args = c(interactFile,
-                   cometFiles),
+                   searchFiles),
           invisible = F,
           minimized = T,
           wait = T)

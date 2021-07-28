@@ -5,18 +5,22 @@
 #' @param msConvert path to msConvert executable. If no argument is passed, it will try to autodetect the executable on your system.
 #' @param tppDir path to Transproteomic pipeline installation folder (for example "C:/TPP"). if no argument is passed, it will try to autodetect the installation folder.
 #' @param openMsDir path to OpenMS installation folder.(such as "C:/Program Files/OpenMS-2.5.0/"). Will try to autodetect the installation folder if no argument is passed.
+#' @param msfragger path to MSFragger java application.
+#' @param searchEngine character specifying the search engine to use. Can be either "comet" (default) or "msfragger".
 #' @param filter character vector with msCOnvert filters. Peakpickning on the MS1 level is set as default.
 #' @param staggeredWindows logical stating if staggered windows were acquired for the input DIA files. (Default is FALSE).
 #' @param diaUmpireParams *path to a DIA Umpire Signal extraction parameters file. These parameters are necessary for the creation of Pseudo-DDA MS/MS spectra.
 #' @param cometParams *path to a Comet parameters file necessary for the database searching of pseudo-MS/MS spectra.
+#' @param fragParams *path to a Comet parameters file necessary for the database searching of pseudo-MS/MS spectra.
 #' @param spectrastParams *path to a spectrast parameters file with parameters for creation of a spectral library.
 #' @param libType Type of library to build. Possible values are 1) 'consensus' (default) and 2) 'best_replicate'
 #' @param updateLib logical indicating if the created library should be updated. Will in this case re-run Spectrast and OpenSwathAssayGenerator to make a new library.
+#' @param updateSearch logical indicating if the database searching should be updated.
 #' @param irt Can either be set to "biognosys_irt" or NULL (default). If set to "biognosys_irt", the calibration library retention times will be converted to iRT values.
 #' @param threads Number of threads or parallel processes to use. Will by default use all available logical processors.
 #' @export create.calibration.lib
 
-create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = NULL, tppDir = NULL, openMsDir = NULL, filter = "peakPicking true 1-", staggeredWindows = F, diaUmpireParams = NULL, cometParams = NULL, spectrastParams = NULL, libType = "consensus", updateLib = FALSE, irt = NULL, threads = detectCores()) {
+create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = NULL, tppDir = NULL, openMsDir = NULL, msfragger = NULL, searchEngine = "comet", filter = "peakPicking true 1-", staggeredWindows = F, diaUmpireParams = NULL, cometParams = NULL, spectrastParams = NULL, fragParams = NULL, libType = "consensus", updateSearch = FALSE, updateLib = FALSE, irt = NULL, threads = detectCores()) {
 
 
   find.params = function(params, paramsName, str) {
@@ -35,7 +39,7 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
     }
     params
   }
-  if(!updateLib) {
+  if(!updateLib & !updateSearch) {
     if(!dir.exists(projectFolder)) {
       pass = dir.create(projectFolder)
       if(pass) {
@@ -46,6 +50,9 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
     } else {
       stop("Project folder already exists")
     }
+  } else if (updateSearch & dir.exists(projectFolder)) {
+    print(str_c("Will update database search and library building in project folder: ", projectFolder))
+    outputFolder = file.path(projectFolder, "pseudo_dda")
   } else if (updateLib & dir.exists(projectFolder)) {
     print(str_c("Will update calibration library in project folder: ", projectFolder))
     prophetFolder = file.path(projectFolder, "prophet")
@@ -89,24 +96,51 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
     } else {
       oswGen = system2("where", args = "OpenSwathAssayGenerator.exe",stdout = T)
       oswGen = oswGen[grep("OpenMS", oswGen)]
-      if(length(oswGen) != 1) {
-        stop("Cannot find OpenSwathAssayGenerator.exe in OpenMS installation folder!")
+      decoyDb = system2("where", args = "DecoyDatabase.exe",stdout = T)
+      decoyDb  = decoyDb[grep("OpenMS", decoyDb)]
+      if(length(oswGen) != 1 & length(decoyDb) != 1) {
+        stop("Cannot find both OpenSwathAssayGenerator.exe and DecoyDatabase.exe in OpenMS installation folder!")
       }
     }
   } else {
     oswGen = file.path(openMsDir, "bin","OpenSwathAssayGenerator.exe")
+    decoyDb = file.path(openMsDir, "bin","DecoyDatabase.exe")
 
-    if(!(file.exists(oswgen))) {
-      stop("Cannot find OpenSwathAssayGenerator.exe in OpenMS installation folder!")
+    if(!(file.exists(oswgen)) & !(file.exists(decoyDb))) {
+      stop("Cannot find both OpenSwathAssayGenerator.exe and DecoyDatabase.exe in OpenMS installation folder!")
+    }
+  }
+  if(searchEngine == "msfragger") {
+
+    if(is.null(msfragger)) {
+      msfragger = system2("where", args = c("/r", "C:\\", "MSFragger*.jar"), stdout = T)
+      msfragger = msfragger[grep("MSFragger.*jar$", msfragger)]
+      if(length(msfragger) != 1 & !file.exists(msfragger)) {
+        stop("Cannot auto-detect the MSFragger java application...")
+      } else {
+        print("Found MSFragger java application...")
+      }
+    } else {
+      msfragger = file.path(openMsDir, "bin","OpenSwathAssayGenerator.exe")
+      msfragger = msfragger[grep("MSFragger.*jar$", msfragger)]
+      if(length(msfragger) != 1 & !file.exists(msfragger)) {
+        stop("Arg - msfragger. Cannot find the MSFragger java application...")
+      } else {
+        print("Found MSFragger java application...")
+      }
     }
   }
   if(!(libType == "consensus" | libType == "best_replicate")) {
     stop("Invalid arg - libType. Possible values are 1) 'consensus' or 2) 'best_replicate'")
   }
-  cometParams = find.params(cometParams, paramsName = "cometParams", str = "comet_mslibrarian_default.params")
+  if(searchEngine == "msfragger") {
+    fragParams = find.params(fragParams, paramsName = "fragParams", str = "fragger_closed_mslibrarian_default.params")
+  } else {
+    cometParams = find.params(cometParams, paramsName = "cometParams", str = "comet_mslibrarian_default.params")
+  }
   diaUmpireParams = find.params(diaUmpireParams, paramsName = "diaUmpireParams", str = "diaumpire_se_mslibrarian_default.params")
   spectrastParams = find.params(spectrastParams, paramsName = "spectrastParams", str = "spectrast_create_mslibrarian_default.params")
-  if(!updateLib) {
+  if(!updateLib & !updateSearch) {
     if(all(str_detect(diaFiles, pattern = ".raw$"))) {
 
       if(staggeredWindows) {
@@ -154,23 +188,40 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
                   output = outputFolder,
                   threads = threads)
     toc()
+    updateSearch = T
+  }
+  if(updateSearch) {
     tic()
-    print("Running Comet...")
-    run.comet(cometPath = comet,
-              msFiles = list.files(outputFolder, pattern = ".mzXML$", full.names = T), # file.path(tppDir, "bin", "comet.exe")
-              fasta = fasta,
-              cometParams = cometParams,
-              threads = threads)
+    if(searchEngine == "msfragger") {
+      print("Running MSFragger...")
+      run.msfragger(msfragger = msfragger,
+                    fragParams = fragParams,
+                    msFiles = list.files(outputFolder, pattern = ".mzXML$", full.names = T),
+                    fasta = fasta,
+                    decoyDb = decoyDb)
+      searchFiles = list.files(outputFolder, pattern = ".pepXML$", full.names = T)
+      print("Processing MSFragger results...")
+
+
+    } else {
+      print("Running Comet...")
+      run.comet(cometPath = comet,
+                msFiles = list.files(outputFolder, pattern = ".mzXML$", full.names = T), # file.path(tppDir, "bin", "comet.exe")
+                fasta = fasta,
+                cometParams = cometParams,
+                threads = threads)
+      searchFiles = list.files(outputFolder, pattern = ".pep.xml$", full.names = T)
+      print("Processing Comet results...")
+    }
     toc()
     tic()
-    print("Processing Comet results...")
     dir.create(file.path(projectFolder, "prophet"))
     prophetFolder = file.path(projectFolder, "prophet")
     print(str_c("Creating output folder: ", prophetFolder))
     run.prophets(interactPath = interact,
                  peptideProphetPath = peptideProphet,
                  interProphetPath = interProphet,
-                 cometFiles = list.files(outputFolder, pattern = ".pep.xml$", full.names = T), # file.path(tppDir, "bin")
+                 searchFiles = searchFiles, # file.path(tppDir, "bin")
                  output = prophetFolder,
                  threads = threads)
     toc()
@@ -178,7 +229,6 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
     outputFolder = dir.create(file.path(projectFolder, "library"))
     outputFolder = file.path(projectFolder, "library")
     print(str_c("Creating output folder: ", outputFolder))
-
   }
   make.calibration.lib(spectrastPath = spectrast,
                        oswGenPath = oswGen,

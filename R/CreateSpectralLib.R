@@ -89,9 +89,13 @@ create.spectral.lib <- function(calibrationLib = NULL, projectFolder = NULL, msF
   toc()
   tic()
   msLib = make.spectra.lib(msLib,
-                           bestCe = get.best.ce(ceMat = calibLib@Comparisons),
+                           bestCe = get.best.ce.new(ceMat = calibLib@Comparisons),
                            predDb = calibLib@MetaData$PredictionDb,
                            ceMode = ceMode)
+  # msLib = make.spectra.lib(msLib,
+  #                          bestCe = get.best.ce(ceMat = calibLib@Comparisons),
+  #                          predDb = calibLib@MetaData$PredictionDb,
+  #                          ceMode = ceMode)
   toc()
   tic()
   outputLib = export.spectra.lib(msLib, # It must return the output lib argument...

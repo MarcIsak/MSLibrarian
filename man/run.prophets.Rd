@@ -8,7 +8,7 @@ run.prophets(
   interactPath,
   peptideProphetPath,
   interProphetPath,
-  cometFiles,
+  searchFiles,
   output,
   threads
 )
@@ -20,7 +20,7 @@ run.prophets(
 
 \item{interProphetPath}{Absolute path to the interprophetparser.exe}
 
-\item{cometFiles}{input Comet database search result files (pepXML)}
+\item{searchFiles}{input Comet database search result files (pepXML)}
 
 \item{output}{Absolute path to the desired output folder}
 

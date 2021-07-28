@@ -11,12 +11,16 @@ create.calibration.lib(
   msConvert = NULL,
   tppDir = NULL,
   openMsDir = NULL,
+  msfragger = NULL,
+  searchEngine = "comet",
   filter = "peakPicking true 1-",
   staggeredWindows = F,
   diaUmpireParams = NULL,
   cometParams = NULL,
   spectrastParams = NULL,
+  fragParams = NULL,
   libType = "consensus",
+  updateSearch = FALSE,
   updateLib = FALSE,
   irt = NULL,
   threads = detectCores()
@@ -35,6 +39,10 @@ create.calibration.lib(
 
 \item{openMsDir}{path to OpenMS installation folder.(such as "C:/Program Files/OpenMS-2.5.0/"). Will try to autodetect the installation folder if no argument is passed.}
 
+\item{msfragger}{path to MSFragger java application.}
+
+\item{searchEngine}{character specifying the search engine to use. Can be either "comet" (default) or "msfragger".}
+
 \item{filter}{character vector with msCOnvert filters. Peakpickning on the MS1 level is set as default.}
 
 \item{staggeredWindows}{logical stating if staggered windows were acquired for the input DIA files. (Default is FALSE).}
@@ -45,7 +53,11 @@ create.calibration.lib(
 
 \item{spectrastParams}{*path to a spectrast parameters file with parameters for creation of a spectral library.}
 
+\item{fragParams}{*path to a Comet parameters file necessary for the database searching of pseudo-MS/MS spectra.}
+
 \item{libType}{Type of library to build. Possible values are 1) 'consensus' (default) and 2) 'best_replicate'}
+
+\item{updateSearch}{logical indicating if the database searching should be updated.}
 
 \item{updateLib}{logical indicating if the created library should be updated. Will in this case re-run Spectrast and OpenSwathAssayGenerator to make a new library.}
 

@@ -66,6 +66,7 @@ process.calibration.lib <- function(specLib = NULL, projectFolder = NULL, predic
                                              precursors = calibLib@PrecursorData$FilterLib[,c("PeptideSequence", "PrecursorCharge", "msmsIdx")],
                                              predictionDb = predictionDb,
                                              threads = threads)
+  calibLib@Comparisons = precursor.binning(ceMat = calibLib@Comparisons, cutoff = 250)
   calibLib@MetaData$PredictionDb = predictionDb
   print(str_c("Writing processed Calibration Library to: ", outLib))
   save(calibLib, file = outLib,
