@@ -77,7 +77,7 @@ filter.proteins <- function(inputLib = NULL, outputLib = NULL, type = NULL, cali
       } else {
         stop("Could not auto-detect the DIA-NN executable. Please add path to executable (diannPath argument).")
       }
-    } else if(!(file.exists(diannPath) & str_detect(diannPath, "diann.exe"))) {
+    } else if(!(file.exists(diannPath) & str_detect(basename(diannPath), fixed("diann.exe", ignore_case = T)))) {
       stop("Specified DIA-NN executable does not exist...")
     } else {
       print(str_c("DIA-NN path: ", diannPath))
