@@ -9,6 +9,8 @@ run.diann(
   diaFile,
   libFile,
   output = NULL,
+  matrices = T,
+  matQ = 0.01,
   threads = detectCores(),
   fasta = NULL,
   enzyme,
@@ -23,6 +25,10 @@ run.diann(
 \item{libFile}{Absolute path to the input spectral library file (as given by the make.osw.lib function)}
 
 \item{output}{Desired file name for DIA-NN reports (incl. absolute path)}
+
+\item{matrices}{A logical determining if quantitative matrices for proteins and precursors should be outputted (Default=TRUE).}
+
+\item{matQ}{numeric in the range c(0,1) setting the q-value to use for filtering matrices.}
 
 \item{threads}{Integer specifying the number of threads for the analysis}
 

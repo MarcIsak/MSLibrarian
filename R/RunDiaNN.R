@@ -3,18 +3,32 @@
 #' @param diaFile Absolute path to the input DIA raw file
 #' @param libFile Absolute path to the input spectral library file (as given by the make.osw.lib function)
 #' @param output Desired file name for DIA-NN reports (incl. absolute path)
+#' @param matrices A logical determining if quantitative matrices for proteins and precursors should be outputted (Default=TRUE).
+#' @param matQ numeric in the range c(0,1) setting the q-value to use for filtering matrices.
 #' @param threads Integer specifying the number of threads for the analysis
 #' @param fasta Absolute path to a FASTA file for matching of peptides sequences to proteins
 #' @param enzyme Character specifying the enzyme to use for in-silico digestion of sequences in the FASTA file
 #' @param separateMassAcc should mass accuracy be determined for each individual MS file (logical)
 #' @export run.diann
 
-run.diann <- function(diannPath, diaFile, libFile, output = NULL, threads = detectCores(), fasta = NULL, enzyme, separateMassAcc = F) {
+run.diann <- function(diannPath, diaFile, libFile, output = NULL, matrices = T, matQ = 0.01, threads = detectCores(), fasta = NULL, enzyme, separateMassAcc = F) {
 
   if(separateMassAcc) {
     separateMassAcc = "--individual-mass-acc"
   } else {
     separateMassAcc = NULL
+  }
+  if(matrices) {
+    print("Will write quantitative protein and precursor matrices...")
+    matrices = "--matrices"
+    if(is.numeric(matQ) & matQ > 0 & matQ < 1) {
+      print(str_c("Matrices will be filtered at Q = ", matQ))
+      matQ = str_c("--matrix-qvalue ", matQ)
+    } else {
+      stop("Invalid q-value set for matrix filtering!")
+    }
+  } else {
+    matrices = NULL
   }
   if(!is.null(fasta)) {
     fasta = str_c("--fasta ", fasta)
@@ -61,6 +75,7 @@ run.diann <- function(diannPath, diaFile, libFile, output = NULL, threads = dete
                               paste("--library-headers", headers),
                               paste("--out", file.path(output, "report.tsv")),
                               separateMassAcc,
+                              matrices,
                               noProtInf))
 
 }
