@@ -5,9 +5,9 @@
 #' @param download should files in the taskid.txt file be downloaded
 #' @param zipped logical indicating whether downloaded files are zipped (default = T)
 #' @param threads number of parallel downloads to perform
-#' @export make.prediction.db.new
+#' @export make.prediction.db
 
-make.prediction.db.new <- function(prediction_folder, task_id, sqlite, download = T, zipped, threads) {
+make.prediction.db <- function(prediction_folder, task_id, sqlite, download = T, zipped, threads) {
   tic()
   prosit.download <- function(id) {
     url = str_c("https://www.proteomicsdb.org/prosit/api/download.xsjs?datasetId=", id["task_id"])
