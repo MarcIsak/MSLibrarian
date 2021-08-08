@@ -14,7 +14,8 @@ run.diann(
   threads = detectCores(),
   fasta = NULL,
   enzyme,
-  separateMassAcc = F
+  separateMassAcc = F,
+  robustLC = NULL
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ run.diann(
 \item{enzyme}{Character specifying the enzyme to use for in-silico digestion of sequences in the FASTA file}
 
 \item{separateMassAcc}{should mass accuracy be determined for each individual MS file (logical)}
+
+\item{robustLC}{Specfies whether Quantification should be run in Robust LC mode. Possible values are "high_accuracy" or "high_precision". Default = NULL.}
 }
 \description{
 Runs a DIA-NN analysis of the selected DIA-file and input library in TSV format

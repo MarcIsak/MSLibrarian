@@ -7,8 +7,14 @@
 #' @param threads number of threads to use
 #' @export make.prosit.csv
 
-make.prosit.csv <- function(fasta, chargeRange, ceRange, prefix, outputFolder, threads) {
+make.prosit.csv <- function(fasta, chargeRange, ceRange, prefix, outputFolder, threads = detectCores()) {
 
+  if(threads > detectCores()) {
+    threads = detectCores()
+  }
+  if(threads > 8) {
+    threads = 8
+  } # Should be a thread check function since it is used in several places...
   print("Load FASTA...")
   msLib = read.fasta(fasta)
   Sys.sleep(2)
@@ -51,7 +57,12 @@ make.prosit.csv <- function(fasta, chargeRange, ceRange, prefix, outputFolder, t
                          task_id = NA),
               file = str_c(outputFolder, "task_id.txt"),
               delim = "\t")
-  msLib
+  metadata = file.path(outputFolder, str_c(prefix, "_metadata.RData"))
+  print(str_c("Saving SQLite metadata to:", metadata))
+  save(msLib,
+       ascii = F,
+       compress = T,
+       file = metadata) # Should be saved automatically when running make.prosit.csv
 }
 
 

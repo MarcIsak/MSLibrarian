@@ -4,7 +4,14 @@
 \alias{make.prosit.csv}
 \title{Generates a CSV file with precursor information, to be used for prediction of MS/MS spectra in Prosit.}
 \usage{
-make.prosit.csv(fasta, chargeRange, ceRange, prefix, outputFolder, threads)
+make.prosit.csv(
+  fasta,
+  chargeRange,
+  ceRange,
+  prefix,
+  outputFolder,
+  threads = detectCores()
+)
 }
 \arguments{
 \item{fasta}{input fasta file}

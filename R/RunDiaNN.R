@@ -9,14 +9,26 @@
 #' @param fasta Absolute path to a FASTA file for matching of peptides sequences to proteins
 #' @param enzyme Character specifying the enzyme to use for in-silico digestion of sequences in the FASTA file
 #' @param separateMassAcc should mass accuracy be determined for each individual MS file (logical)
+#' @param robustLC Specfies whether Quantification should be run in Robust LC mode. Possible values are "high_accuracy" or "high_precision". Default = NULL.
 #' @export run.diann
 
-run.diann <- function(diannPath, diaFile, libFile, output = NULL, matrices = T, matQ = 0.01, threads = detectCores(), fasta = NULL, enzyme, separateMassAcc = F) {
+run.diann <- function(diannPath, diaFile, libFile, output = NULL, matrices = T, matQ = 0.01, threads = detectCores(), fasta = NULL, enzyme, separateMassAcc = F, robustLC = NULL) {
 
   if(separateMassAcc) {
     separateMassAcc = "--individual-mass-acc"
   } else {
     separateMassAcc = NULL
+  }
+  if(is.null(robustLC)) {
+    peakCenter = NULL
+  } else if(robustLC == "high_accuracy") {
+    peakCenter = "--peak-center"
+    print("Using Robust LC (high accuracy mode)")
+  } else if(robustLC == "high_precision"){
+    peakCenter = str_c("--peak-center", " --no-ifs-removal")
+    print("Using Robust LC (high precision mode)")
+  } else {
+    stop("Arg - robustLC. Invalid string provided. Valid strings are 'high_accuracy' or 'high_precision'")
   }
   if(matrices) {
     print("Will write quantitative protein and precursor matrices...")
@@ -76,6 +88,7 @@ run.diann <- function(diannPath, diaFile, libFile, output = NULL, matrices = T, 
                               paste("--out", file.path(output, "report.tsv")),
                               separateMassAcc,
                               matrices,
-                              noProtInf))
+                              noProtInf,
+                              peakCenter))
 
 }
