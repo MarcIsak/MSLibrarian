@@ -10,7 +10,7 @@ A recommendation is to use a computer with at least 32 GB RAM to avoid issues du
 
 ### Software 
 
-To run MSLibrarian, the following softwares/pipelines **must** be installed on the **C:/**-drive
+To run all features of MSLibrarian, the following softwares/pipelines **must** be installed on the **C:/**-drive
 
  * [**R version 4.0.0**](https://cran.r-project.org/) or higher. 
  * [**Proteowizard suite version 3.0.20365**](http://proteowizard.sourceforge.net/download.html) or higher 
@@ -19,13 +19,13 @@ To run MSLibrarian, the following softwares/pipelines **must** be installed on t
  * [**PREGO**](https://bitbucket.org/searleb/prego-srm-response-predictor/downloads/) 
  * [**DeepLC GUI v0.1.29**](https://github.com/compomics/DeepLC/releases) or higher._Follow the installation guide to setup the miniconda environment._ 
   As an alternative, the **DeepLC CLI (.exe)** can be installed instead. 
- * [**DIA-NN v.17.12**](https://github.com/vdemichev/DiaNN/releases/tag/1.7.12). Currently the most recent version, but older version should also work. 
+ * [**DIA-NN v.1.8**](https://github.com/vdemichev/DiaNN/releases/tag/1.7.12). Currently the most recent version, but older version should also work. 
 
 ## Getting started 
 
 ### Download and install MSLibrarian from Github
 
-To both download and install _MSLibrarian_ from Github, use the **devtools** package. Currently, the repository is private, meaning that those with access needs to provide a [personal access token (PAT)](https://github.com/settings/tokens) to the argument _auth_token_ of the _install_github_ function. In the future, the repository will become a public.  
+To both download and install _MSLibrarian_ from Github, use the **devtools** package. 
 
 ```
 library(devtools)
