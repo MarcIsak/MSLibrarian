@@ -2,12 +2,11 @@
 #' @param prediction_folder output folder where the predicted spectral library files will be processed and stored
 #' @param task_id text file with input prosit csv file names and their respective task ids
 #' @param sqlite preferred name of the SQLite database *.sqlite (It will be added to a subfolder called SQLite in the set prediction_folder)
-#' @param download should files in the taskid.txt file be downloaded
+#' @param download should files in the taskid.txt file be downloaded (default = T)
 #' @param zipped logical indicating whether downloaded files are zipped (default = T)
-#' @param threads number of parallel downloads to perform
 #' @export make.prediction.db
 
-make.prediction.db <- function(prediction_folder, task_id, sqlite, download = T, zipped, threads) {
+make.prediction.db <- function(prediction_folder, task_id, sqlite, download = T, zipped = T) {
   tic()
   prosit.download <- function(id) {
     url = str_c("https://www.proteomicsdb.org/prosit/api/download.xsjs?datasetId=", id["task_id"])
@@ -47,6 +46,7 @@ make.prediction.db <- function(prediction_folder, task_id, sqlite, download = T,
                                                        FragmentType = col_character(),
                                                        FragmentNumber = col_integer(),
                                                        FragmentCharge = col_integer()))
+    gc()
     if(i == min(files)) {
       precursorComp = str_c(myPrositLib$LabeledPeptide, "_", myPrositLib$PrecursorCharge)
       transitionComp = str_c(myPrositLib$FragmentType, myPrositLib$FragmentNumber, "_", myPrositLib$FragmentCharge)

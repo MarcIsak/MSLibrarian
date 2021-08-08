@@ -9,8 +9,7 @@ make.prediction.db(
   task_id,
   sqlite,
   download = T,
-  zipped,
-  threads
+  zipped = T
 )
 }
 \arguments{
@@ -20,11 +19,9 @@ make.prediction.db(
 
 \item{sqlite}{preferred name of the SQLite database *.sqlite (It will be added to a subfolder called SQLite in the set prediction_folder)}
 
-\item{download}{should files in the taskid.txt file be downloaded}
+\item{download}{should files in the taskid.txt file be downloaded (default = T)}
 
 \item{zipped}{logical indicating whether downloaded files are zipped (default = T)}
-
-\item{threads}{number of parallel downloads to perform}
 }
 \description{
 Creates a predicted spectral library database
