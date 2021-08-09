@@ -29,17 +29,11 @@ To both download and install _MSLibrarian_ from Github, use the **devtools** pac
 
 ```
 library(devtools)
-install_github("MarcIsak/MSLibrarian", auth_token = "change-to-your-personal-access-token")
+install_github("MarcIsak/MSLibrarian")
 
 ```
 ### Run MSLibrarian 
 
-To use MSLibrarian from your library folder, you simply run: 
-
-```
-library(MSLibrarian)
-
-```
-To learn how to run MSLibrarian, go the subfolder **examples** of this repository and follow the tutorial described in **demo_mslibr.rmd**.
+Go to the **WIKI** of this repository to learn how to create a predicted spectral library in MSLibrarian. There is also a page on how to manually create a Prosit prediction SQLite database. 
 
 
