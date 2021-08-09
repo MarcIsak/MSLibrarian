@@ -34,6 +34,6 @@ install_github("MarcIsak/MSLibrarian")
 ```
 ### Run MSLibrarian 
 
-Go to the **WIKI** of this repository to learn how to create a predicted spectral library in MSLibrarian. There is also a page on how to manually create a Prosit prediction SQLite database. 
+Go to the **Wiki** of this repository to learn how to create a predicted spectral library in MSLibrarian. There is also a page on how to manually create a **Prosit Prediction SQLite database**. 
 
 
