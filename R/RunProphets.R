@@ -14,7 +14,7 @@ run.prophets <- function(interactPath, peptideProphetPath, interProphetPath, sea
   # nonparam = "NONPARAM"
   interactFile = file.path(output, "interact.pep.xml")
 
-  print("Merging Comet output files...")
+  print("Merging database search output files...")
   system2(interactPath, # str_c(tppPath, "InteractParser.exe")
           args = c(interactFile,
                    searchFiles),

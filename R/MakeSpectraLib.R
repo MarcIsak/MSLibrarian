@@ -17,6 +17,9 @@ make.spectra.lib <- function(msLib, bestCe, predDb, ceMode) {
 
     ce = bestCe[bestCe$charge == charge, ]
     peptLengths = sapply(unique(ce$ce), get.pept.length, ce)
+    if(length(unique(ce$ce)) == 1) {
+      peptLengths = list(peptLengths)
+    }
     names(peptLengths) = paste("ce_",unique(ce$ce), sep = "")
     peptLengths
 

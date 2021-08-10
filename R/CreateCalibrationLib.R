@@ -179,7 +179,7 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
     } else {
       stop("Incorrect MS files supplied. Make sure that all input DIA files are either in RAW or mzXML format.")
     }
-    print("Preparing for Comet search...")
+    print("Preparing for database searching...")
     tic()
     run.msconvert(msConvertPath = msConvert,
                   rawFiles = list.files(outputFolder, pattern = ".mgf$", full.names = T),

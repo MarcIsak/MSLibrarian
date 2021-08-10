@@ -20,7 +20,8 @@ get.best.ce.new <- function(ceMat) {
     dotp = sapply(ceSel, get.dotproduct, n, mat)
     #print(dotp) # remove after
     if(any(dotp != 0)) { # Changed from all...
-      k = c(ceSel[dotp == max(dotp)], max(dotp), n)
+      # k = c(ceSel[dotp == max(dotp)], max(dotp), n) # This is working
+      k = c(ceSel[dotp == max(dotp)], max(dotp), n, unique(mat$charge)) # This is working
       #print(k) # remove after
       if(str_detect(n, "_")) {
         n = as.numeric(unlist(str_split(n, pattern = "_")))
@@ -33,7 +34,7 @@ get.best.ce.new <- function(ceMat) {
         k
       }
     } else {
-      c(NA, NA, n)
+      c(NA, NA, n, unique(mat$charge))
     }
   }
   add.ce <- function(charge, bestCe) {
@@ -67,10 +68,10 @@ get.best.ce.new <- function(ceMat) {
   print("Third")
   # No hard coding, change how bestCe is calculated...
 
-  colnames(bestCe) = c("ce", "dotproduct", "peptideLength")
+  colnames(bestCe) = c("ce", "dotproduct", "peptideLength", "charge")
   bestCe = bestCe[!is.na(bestCe$dotproduct),]
-  bestCe$charge = rep(c(unique(ceMat$charge)),
-                      each = length(unique(bestCe$peptideLength)))
+  # bestCe$charge = rep(c(unique(ceMat$charge)),
+  #                     each = length(unique(bestCe$peptideLength)))
   bestCe = do.call('rbind',lapply(unique(bestCe$charge), add.ce, bestCe))
   print("Fourth")
   # Strange messages...look up...
