@@ -1,8 +1,8 @@
 #' Extract the optimal collision energy based on peptide length, peptide length and charge, or just precursor charge
 #' @param ceMat input collision energy matrix as a result from running run.spectral.match
-#' @export get.best.ce.new
+#' @export get.best.ce
 
-get.best.ce.new <- function(ceMat) {
+get.best.ce <- function(ceMat) {
 
   get.dotproduct <- function(x, n, mat) {
 
