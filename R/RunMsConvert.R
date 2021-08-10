@@ -32,6 +32,9 @@ run.msconvert <- function(msConvertPath = NULL, rawFiles, format, filter, output
   if(threads > length(rawFiles)) {
     threads = length(rawFiles)
   }
+  if(threads >= 8) {
+    threads = 8
+  }
   print(str_c("Setting threads to: ", threads))
   verbose = "-v"
   if (filter != "") {

@@ -39,8 +39,8 @@ make.pseudo.spectra <- function(msConvertPath, mzmlFiles, format, diaUmpireParam
     system2(msConvertPath, args = c(mzmlFiles, format, filter, output, verbose))
   } else if (threads >= length(mzmlFiles)) {
     threads = length(mzmlFiles)
-    if(threads >= 8) {
-      threads = 8
+    if(threads >= 6) {
+      threads = 6
     }
     print(str_c("Parallel conversion enabled. Number of parallel processes: ", threads, "..."))
     cl = makeCluster(threads)

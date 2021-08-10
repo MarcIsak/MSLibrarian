@@ -11,7 +11,7 @@ create.spectral.lib(
   fasta,
   outputLib = NULL,
   format = "spectronaut",
-  ceMode = "charge",
+  ceMode = "length_charge",
   threads = detectCores(),
   saveObj = F
 )
