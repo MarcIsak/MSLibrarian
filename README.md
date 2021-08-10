@@ -4,7 +4,7 @@
 
 ### Hardware 
 
-In its current form, MSLibrarian **must** be installed on a computer with **Windows** as the operating system. This requirement is mainly a consequence of the current third party softwares that the package uses for its operation. A future aim is to make MSLibrarian a cross-platform application as a docker image. 
+In its current form, MSLibrarian **must** be installed on a computer with **Windows** as the operating system. This requirement is mainly a consequence of the current third party softwares that the package uses for its operation. A future aim is to make MSLibrarian into a cross-platform application, and also provide it as a docker image. 
 
 A recommendation is to use a computer with at least 32 GB RAM to avoid issues during some of the more memory-requiring tasks that MSLibrarian performs. 
 
@@ -19,7 +19,7 @@ To run all features of MSLibrarian, the following softwares/pipelines **must** b
  * [**PREGO**](https://bitbucket.org/searleb/prego-srm-response-predictor/downloads/) 
  * [**DeepLC GUI v0.1.29**](https://github.com/compomics/DeepLC/releases) or higher._Follow the installation guide to setup the miniconda environment._ 
   As an alternative, the **DeepLC CLI (.exe)** can be installed instead. 
- * [**DIA-NN v.1.8**](https://github.com/vdemichev/DiaNN/releases/tag/1.7.12). Currently the most recent version, but older version should also work. 
+ * [**DIA-NN v.1.8**](https://github.com/vdemichev/DiaNN/releases/tag/1.7.12). Currently the most recent version, but older versions should also work. 
 
 ## Getting started 
 
@@ -29,17 +29,11 @@ To both download and install _MSLibrarian_ from Github, use the **devtools** pac
 
 ```
 library(devtools)
-install_github("MarcIsak/MSLibrarian", auth_token = "change-to-your-personal-access-token")
+install_github("MarcIsak/MSLibrarian")
 
 ```
 ### Run MSLibrarian 
 
-To use MSLibrarian from your library folder, you simply run: 
-
-```
-library(MSLibrarian)
-
-```
-To learn how to run MSLibrarian, go the subfolder **examples** of this repository and follow the tutorial described in **demo_mslibr.rmd**.
+Go to the **Wiki** of this repository to learn how to create a predicted spectral library in MSLibrarian. There is also a page on how to manually create a **Prosit Prediction SQLite database**. 
 
 
