@@ -6,7 +6,6 @@
 precursor.binning <- function(ceMat, cutoff) {
 
   set.range <- function(ranges, mat, z) {
-    print(z)
     if(length(ranges) == 1) {
       ranges = c(ranges, ranges + 1)
       #print(which(between(mat$peptideLength, lower = min(ranges), upper = max(ranges)) & mat$charge == z))
