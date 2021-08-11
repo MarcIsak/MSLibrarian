@@ -62,10 +62,10 @@ make.spectra.lib <- function(msLib, bestCe, predDb, ceMode) {
     stop()
   }
   if(ceMode == "length_only") {
-    print("Peptide lenght optimized CE selected...")
+    print("Peptide length optimized CE selected...")
     ce = bestCe$charge_length_only
   } else if(ceMode == "length_charge") {
-    print("Peptide lenght and charge optimized CE selected...")
+    print("Peptide length and charge optimized CE selected...")
     ce = do.call('c', bestCe[!grepl("only", names(bestCe))])
   } else if (ceMode == "charge") {
     print("Precursor charge optimized CE selected")

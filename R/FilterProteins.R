@@ -74,6 +74,8 @@ filter.proteins <- function(inputLib = NULL, outputLib = NULL, type = NULL, cali
       diannPath = system2("where", args = c("/r", "C:\\", "diann.exe"), stdout = T)
       if(length(diannPath) == 1) {
         print("Found DIA-NN executable...")
+      } else if(length(diannPath) > 1) {
+        stop("Found more than one DIA-NN executable. Please add the path to a single executable (diannPath argument).")
       } else {
         stop("Could not auto-detect the DIA-NN executable. Please add path to executable (diannPath argument).")
       }
@@ -87,7 +89,8 @@ filter.proteins <- function(inputLib = NULL, outputLib = NULL, type = NULL, cali
       run.diann(diannPath = diannPath,
                 diaFile = diaFiles,
                 libFile = inputLib,
-                output = file.path(dirname(inputLib), "diann"))
+                output = file.path(dirname(inputLib), "diann"),
+                matrices = F)
     }
     print("Loading DIA-NN report...")
     diannReport = read_tsv(file.path(dirname(inputLib), "diann", "report.tsv"),

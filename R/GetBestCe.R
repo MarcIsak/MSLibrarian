@@ -56,16 +56,13 @@ get.best.ce <- function(ceMat) {
     tmp[tmp[,"dotproduct"] == max(tmp[,"dotproduct"]),]
 
   }
-  print("First")
   ceMat = ceMat[!is.na(ceMat$dotproduct),]
   ceSel = sort(unique(ceMat$ce))
 
   lenRange = unique(ceMat$lenRange)
   lenRange = lenRange[order(as.numeric(unlist(lapply(str_split(lenRange, "_"), min))))]
-  print("Second")
   bestCe = rbind(as.data.frame(do.call('rbind', lapply(lenRange, set.pept.length, ceSel, ceMat[ceMat$charge == 2,]))),
                  as.data.frame(do.call('rbind', lapply(lenRange, set.pept.length, ceSel, ceMat[ceMat$charge == 3,]))))
-  print("Third")
   # No hard coding, change how bestCe is calculated...
 
   colnames(bestCe) = c("ce", "dotproduct", "peptideLength", "charge")
@@ -73,7 +70,6 @@ get.best.ce <- function(ceMat) {
   # bestCe$charge = rep(c(unique(ceMat$charge)),
   #                     each = length(unique(bestCe$peptideLength)))
   bestCe = do.call('rbind',lapply(unique(bestCe$charge), add.ce, bestCe))
-  print("Fourth")
   # Strange messages...look up...
 
   bestCe = rbind(bestCe, do.call('rbind', lapply(sort(unique(ceMat$charge)), set.charge, ceMat)))
