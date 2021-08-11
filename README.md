@@ -21,6 +21,13 @@ To run all features of MSLibrarian, the following softwares/pipelines **must** b
   As an alternative, the **DeepLC CLI (.exe)** can be installed instead. 
  * [**DIA-NN v.1.8**](https://github.com/vdemichev/DiaNN/releases/tag/1.7.12). Currently the most recent version, but older versions should also work. 
 
+## MS Data 
+
+The input MS data must conform to the following: 
+
+* **Format:** Thermo raw (other file formats should be available in the future) 
+* **Acquisition mode:** DIA (must contain both MS1 and MS2 scans)
+ 
 ## Getting started 
 
 ### Download and install MSLibrarian from Github
@@ -32,8 +39,16 @@ library(devtools)
 install_github("MarcIsak/MSLibrarian")
 
 ```
+### Prosit prediction SQLite databases
+
+MSLibrarian relies on Prosit prediction SQLite databases to make spectral libraries. SQLite databases can be downloaded for some 
+common species through **Zenodo** (link to submitted database), or be manually created in MSLibrarian. Go to the **Wiki** of this repository to learn how 
+to create your own Prosit prediction SQLite database. 
+
+
+
 ### Run MSLibrarian 
 
-Go to the **Wiki** of this repository to learn how to create a predicted spectral library in MSLibrarian. There is also a page on how to manually create a **Prosit Prediction SQLite database**. 
+Go to the **Wiki** of this repository to learn how to create a predicted spectral library in MSLibrarian. 
 
 
