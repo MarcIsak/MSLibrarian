@@ -28,7 +28,6 @@ The input MS data must conform to the following:
 * **Format:** Thermo raw (other file formats should be available in the future) 
 * **Acquisition mode:** DIA (must contain both MS1 and MS2 scans)
  
-
 ## Getting started 
 
 ### Download and install MSLibrarian from Github
