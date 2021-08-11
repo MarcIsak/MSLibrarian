@@ -21,7 +21,7 @@ To run all features of MSLibrarian, the following softwares/pipelines **must** b
   As an alternative, the **DeepLC CLI (.exe)** can be installed instead. 
  * [**DIA-NN v.1.8**](https://github.com/vdemichev/DiaNN/releases/tag/1.7.12). Currently the most recent version, but older versions should also work. 
 
-## MS data 
+## MS Data 
 
 The input MS data must conform to the following: 
 
