@@ -25,8 +25,8 @@ To run all features of MSLibrarian, the following softwares/pipelines **must** b
 
 The MS data must conform to the following: 
 
-* Format: Thermo raw (other file formats should be available in the future) 
-* Acquisition mode: DIA (must contain both MS1 and MS2 scans)
+* **Format:** Thermo raw (other file formats should be available in the future) 
+* **Acquisition mode:** DIA (must contain both MS1 and MS2 scans)
  
 
 ## Getting started 
