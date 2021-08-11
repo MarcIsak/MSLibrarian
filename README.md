@@ -35,7 +35,7 @@ install_github("MarcIsak/MSLibrarian")
 ### Prosit prediction SQLite databases
 
 MSLibrarian relies on Prosit prediction SQLite databases to make spectral libraries. SQLite databases can be downloaded for some 
-common species through Zenodo (link to submitted database), or be manually created in MSLibrarian. Go to the Wiki of this repository to learn how 
+common species through Zenodo (link to submitted database), or be manually created in MSLibrarian. Go to the **Wiki** of this repository to learn how 
 to create your own Prosit prediction SQLite database. 
 
 
