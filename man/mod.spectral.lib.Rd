@@ -12,7 +12,7 @@ mod.spectral.lib(
   mods,
   diaFiles,
   protMod,
-  protFdr = 0.2,
+  protFdr = 0.05,
   diannPath = NULL,
   topPept = NULL,
   pregoPath = NULL,

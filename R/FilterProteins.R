@@ -9,7 +9,7 @@
 #' @param replace should the input library be overwritten/replaced (logical)? Default is FALSE
 #' @export filter.proteins
 
-filter.proteins <- function(inputLib = NULL, outputLib = NULL, type = NULL, calibrationLib = NULL, fdr = 0.2, diaFiles, diannPath = NULL, replace = F) {
+filter.proteins <- function(inputLib = NULL, outputLib = NULL, type = NULL, calibrationLib = NULL, fdr, diaFiles, diannPath = NULL, replace = F) {
 
 
   diann = F
@@ -96,6 +96,7 @@ filter.proteins <- function(inputLib = NULL, outputLib = NULL, type = NULL, cali
     diannReport = read_tsv(file.path(dirname(inputLib), "diann", "report.tsv"),
                            col_types = cols_only(PG.Q.Value = col_double(),
                                                  Protein.Group = col_character()))
+    print(fdr)
     if(max(diannReport$PG.Q.Value) <= fdr) {
       fdr = max(diannReport$PG.Q.Value)
       print(str_c("Maximum protein group FDR according to DIA-NN: ", fdr))

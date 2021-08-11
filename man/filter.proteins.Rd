@@ -9,7 +9,7 @@
   outputLib = NULL,
   type = NULL,
   calibrationLib = NULL,
-  fdr = 0.2,
+  fdr,
   diaFiles,
   diannPath = NULL,
   replace = F

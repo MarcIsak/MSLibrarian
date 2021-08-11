@@ -17,7 +17,7 @@
 #' @param deepLcPath path to DeepLC GUI folder. It will try to auto-detect the folder if not supplied.
 #' @export mod.spectral.lib
 
-mod.spectral.lib <- function(projectFolder = NULL, inputLib = NULL, outputLib = NULL, calibrationLib = NULL, mods, diaFiles, protMod, protFdr = 0.2, diannPath = NULL, topPept = NULL, pregoPath = NULL, cutoffTrans = NULL, topTrans = NULL, minTrans = NULL, nCal = 0.25, deepLcPath = NULL) {
+mod.spectral.lib <- function(projectFolder = NULL, inputLib = NULL, outputLib = NULL, calibrationLib = NULL, mods, diaFiles, protMod, protFdr = 0.05, diannPath = NULL, topPept = NULL, pregoPath = NULL, cutoffTrans = NULL, topTrans = NULL, minTrans = NULL, nCal = 0.25, deepLcPath = NULL) {
 
   if(!is.null(projectFolder) & is.null(calibrationLib)) {
     calibrationLib = file.path(projectFolder, "library", "calibration_lib.RData")
