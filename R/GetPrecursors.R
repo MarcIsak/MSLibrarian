@@ -4,9 +4,9 @@
 #' @param chargeRange charge ranges for resulting precursor ions
 #' @param matchDb logical indicating if matching to a prediction database will be performed
 #' @param threads number of threads to use
-#' @export get.precursors.new
+#' @export get.precursors
 
-get.precursors.new = function(msLib, mzRange,chargeRange, matchDb, threads) {
+get.precursors = function(msLib, mzRange,chargeRange, matchDb, threads) {
 
   get.protein.id = function(precursors, duplicatedSeq) {
 
@@ -28,7 +28,8 @@ get.precursors.new = function(msLib, mzRange,chargeRange, matchDb, threads) {
   duplicatedPeptides = msLib@Sequences@Peptides$Predictable[msLib@Sequences@Peptides$Predictable$duplicated_sequence,]
   print("Creating precursor data...")
   print("Removing duplicated sequences...")
-  precursorCols = c("protein_id", "peptide_sequence", "precursor_mass")
+  #precursorCols = c("protein_id", "peptide_sequence", "precursor_mass")
+  precursorCols = c("protein_id", "peptide_sequence", "precursor_mass", str_c("predIdx_z", chargeRange))
   precursors = msLib@Sequences@Peptides$Predictable[!msLib@Sequences@Peptides$Predictable$duplicated_sequence, precursorCols]
   if(matchDb) {
     predIdx = msLib@Sequences@Peptides$Predictable[!msLib@Sequences@Peptides$Predictable$duplicated_sequence, paste("predIdx_z", chargeRange, sep = "")]

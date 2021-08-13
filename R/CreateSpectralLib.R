@@ -7,9 +7,9 @@
 #' @param format output library format c("spectronaut", "openswath")
 #' @param ceMode Collision energy optimization setting. Possible values are c("length_only", "length_charge", "charge", scalar(fixed collision energy))
 #' @param saveObj Determines whether a MSLibrarian object will be saved. Possible values are "TRUE" or "FALSE" (default)
-#' @export create.spectral.lib.new
+#' @export create.spectral.lib
 
-create.spectral.lib.new <- function(calibrationLib = NULL, projectFolder = NULL, msFile = NULL, fasta, outputLib = NULL, format = "spectronaut", ceMode = "length_charge", threads = detectCores(), saveObj = F) {
+create.spectral.lib <- function(calibrationLib = NULL, projectFolder = NULL, msFile = NULL, fasta, outputLib = NULL, format = "spectronaut", ceMode = "length_charge", threads = detectCores(), saveObj = F) {
 
   if(!is.null(projectFolder) & is.null(calibrationLib)) {
     calibrationLib = file.path(projectFolder, "library", "calibration_lib.RData")
@@ -81,11 +81,11 @@ create.spectral.lib.new <- function(calibrationLib = NULL, projectFolder = NULL,
                          chargeRange = c(2,3)) # A parameter should be set for this later, but it will cause a bug at the moment.
   toc()
   tic()
-  msLib = get.precursors.new(msLib,
-                             mzRange = range(fData(msexp)[fData(msexp)$msLevel == 1, c("lowMZ", "highMZ")]),
-                             chargeRange = c(2,3), # A parameter should be set for this later, but it will cause a bug at the moment.
-                             matchDb = T,
-                             threads = threads)
+  msLib = get.precursors(msLib,
+                         mzRange = range(fData(msexp)[fData(msexp)$msLevel == 1, c("lowMZ", "highMZ")]),
+                         chargeRange = c(2,3), # A parameter should be set for this later, but it will cause a bug at the moment.
+                         matchDb = T,
+                         threads = threads)
   toc()
   tic()
   msLib = make.spectra.lib(msLib,
