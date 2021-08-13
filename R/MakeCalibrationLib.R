@@ -34,6 +34,13 @@ make.calibration.lib <- function(spectrastPath, oswGenPath, prophetFile, libType
                 delim = "\t",
                 col_names = F)
     irt = str_c("-c_IRT", file.path(dirname(prophetFile), "irt_biognosys.txt"))
+  } else if(irt == "CiRT"){
+    print("Library retention times will be converted to Conserved iRT (CiRT) values...")
+    write_delim(MSLibrarian::cirt,
+                file = file.path(dirname(prophetFile), "CiRT.txt"),
+                delim = "\t",
+                col_names = F)
+    irt = str_c("-c_IRT", file.path(dirname(prophetFile), "CiRT.txt"))
   } else {
     print("invalid argument irt...will ignore this parameter...")
     irt = NULL

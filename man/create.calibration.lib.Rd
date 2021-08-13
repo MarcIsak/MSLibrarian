@@ -61,7 +61,7 @@ create.calibration.lib(
 
 \item{updateLib}{logical indicating if the created library should be updated. Will in this case re-run Spectrast and OpenSwathAssayGenerator to make a new library.}
 
-\item{irt}{Can either be set to "biognosys_irt" or NULL (default). If set to "biognosys_irt", the calibration library retention times will be converted to iRT values.}
+\item{irt}{Can either be set to "biognosys_irt", "CiRT" or NULL (default). If set to "biognosys_irt" or "CiRT", the calibration library retention times will be converted to iRT values.}
 
 \item{threads}{Number of threads or parallel processes to use. Will by default use all available logical processors.}
 }

@@ -16,7 +16,7 @@
 #' @param libType Type of library to build. Possible values are 1) 'consensus' (default) and 2) 'best_replicate'
 #' @param updateLib logical indicating if the created library should be updated. Will in this case re-run Spectrast and OpenSwathAssayGenerator to make a new library.
 #' @param updateSearch logical indicating if the database searching should be updated.
-#' @param irt Can either be set to "biognosys_irt" or NULL (default). If set to "biognosys_irt", the calibration library retention times will be converted to iRT values.
+#' @param irt Can either be set to "biognosys_irt", "CiRT" or NULL (default). If set to "biognosys_irt" or "CiRT", the calibration library retention times will be converted to iRT values.
 #' @param threads Number of threads or parallel processes to use. Will by default use all available logical processors.
 #' @export create.calibration.lib
 
