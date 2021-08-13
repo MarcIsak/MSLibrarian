@@ -7,9 +7,9 @@
 #' @param format output library format c("spectronaut", "openswath")
 #' @param ceMode Collision energy optimization setting. Possible values are c("length_only", "length_charge", "charge", scalar(fixed collision energy))
 #' @param saveObj Determines whether a MSLibrarian object will be saved. Possible values are "TRUE" or "FALSE" (default)
-#' @export create.spectral.lib
+#' @export create.spectral.lib.new
 
-create.spectral.lib <- function(calibrationLib = NULL, projectFolder = NULL, msFile = NULL, fasta, outputLib = NULL, format = "spectronaut", ceMode = "length_charge", threads = detectCores(), saveObj = F) {
+create.spectral.lib.new <- function(calibrationLib = NULL, projectFolder = NULL, msFile = NULL, fasta, outputLib = NULL, format = "spectronaut", ceMode = "length_charge", threads = detectCores(), saveObj = F) {
 
   if(!is.null(projectFolder) & is.null(calibrationLib)) {
     calibrationLib = file.path(projectFolder, "library", "calibration_lib.RData")

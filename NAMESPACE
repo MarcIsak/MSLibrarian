@@ -3,7 +3,7 @@
 export(add.deeplc.rt)
 export(ce.bench.plot)
 export(create.calibration.lib)
-export(create.spectral.lib)
+export(create.spectral.lib.new)
 export(digest.proteins)
 export(export.spectra.lib)
 export(feature.filtering)

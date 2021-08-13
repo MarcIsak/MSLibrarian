@@ -33,16 +33,29 @@ get.precursors = function(msLib, mzRange,chargeRange, matchDb, threads) {
   if(matchDb) {
     predIdx = msLib@Sequences@Peptides$Predictable[!msLib@Sequences@Peptides$Predictable$duplicated_sequence, paste("predIdx_z", chargeRange, sep = "")]
   }
-  cl = makeCluster(threads)
-  clusterEvalQ(cl, {
-    .libPaths(.libPaths()) # Sets the library path
-  })
-  precursors$protein_id = parallel::parApply(cl,
-                                             precursors[,c("protein_id", "peptide_sequence")],
-                                             1,
-                                             get.protein.id,
-                                             duplicatedPeptides)
-  stopCluster(cl)
+  # cl = makeCluster(threads)
+  # clusterEvalQ(cl, {
+  #   .libPaths(.libPaths()) # Sets the library path
+  # })
+  # precursors$protein_id = parallel::parApply(cl,
+  #                                            precursors[,c("protein_id", "peptide_sequence")],
+  #                                            1,
+  #                                            get.protein.id,
+  #                                            duplicatedPeptides)
+  # stopCluster(cl)
+  duplicatedPeptides = duplicatedPeptides[,c("predIdx_z2", "protein_id")]
+  duplicatedPeptides = aggregate(duplicatedPeptides, by = list(idx = duplicatedPeptides$predIdx_z2), rbind)
+  duplicatedPeptides$protein_id = do.call('rbind', lapply(duplicatedPeptides$protein_id, str_c, collapse = ";"))
+  duplicatedPeptides = as.data.table(duplicatedPeptides)
+  setkey(duplicatedPeptides, idx)
+  duplicatedPeptides = duplicatedPeptides[.(precursors$predIdx_z2)]
+  if(identical(duplicatedPeptides$idx, precursors$predIdx_z2)) {
+    nas = !is.na(duplicatedPeptides$protein_id)
+    precursors$protein_id[nas] = str_c(precursors$protein_id[nas], duplicatedPeptides$protein_id[nas], sep = ";")
+  } else {
+    stop("Prediction indices do not match...")
+  }
+  gc()
   precursors = do.call('rbind', replicate(length(chargeRange), precursors, simplify = F))
   precursors$precursor_charge = rep(chargeRange, each = (nrow(precursors)/length(chargeRange)))
   toc()
