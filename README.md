@@ -47,7 +47,7 @@ to create your own Prosit prediction SQLite database.
 
 ### Parameter files 
 
-Some of the third-party tools that MSLibrarian uses, such as Comet (or MSFragger), DIA-Umpire or Spectrast requires parameters files. Example parameter files can be found in the folder **params** in this repository. Make sure to add the folder to the C:/-drive and that the path to the files **do not** contain any spaces. 
+Some of the third-party tools that MSLibrarian uses, such as Comet (or MSFragger), DIA-Umpire or Spectrast require parameters files. Example parameter files can be found in the folder **params** in this repository. Make sure to add the folder to the C:/-drive and that the path to the files **do not** contain any spaces. 
 
 These parameter files can be edited, but it is **not recommended** to do so.
 
