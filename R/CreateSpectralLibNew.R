@@ -81,11 +81,11 @@ create.spectral.lib.new <- function(calibrationLib = NULL, projectFolder = NULL,
                          chargeRange = c(2,3)) # A parameter should be set for this later, but it will cause a bug at the moment.
   toc()
   tic()
-  msLib = get.precursors(msLib,
-                         mzRange = range(fData(msexp)[fData(msexp)$msLevel == 1, c("lowMZ", "highMZ")]),
-                         chargeRange = c(2,3), # A parameter should be set for this later, but it will cause a bug at the moment.
-                         matchDb = T,
-                         threads = threads)
+  msLib = get.precursors.new(msLib,
+                             mzRange = range(fData(msexp)[fData(msexp)$msLevel == 1, c("lowMZ", "highMZ")]),
+                             chargeRange = c(2,3), # A parameter should be set for this later, but it will cause a bug at the moment.
+                             matchDb = T,
+                             threads = threads)
   toc()
   tic()
   msLib = make.spectra.lib(msLib,
