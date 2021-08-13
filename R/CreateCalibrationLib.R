@@ -20,12 +20,13 @@
 #' @param threads Number of threads or parallel processes to use. Will by default use all available logical processors.
 #' @export create.calibration.lib
 
-create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = NULL, tppDir = NULL, openMsDir = NULL, msfragger = NULL, searchEngine = "comet", filter = "peakPicking true 1-", staggeredWindows = F, diaUmpireParams = NULL, cometParams = NULL, spectrastParams = NULL, fragParams = NULL, libType = "consensus", updateSearch = FALSE, updateLib = FALSE, irt = NULL, threads = detectCores()) {
+create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConvert = NULL, tppDir = NULL, openMsDir = NULL, msfragger = NULL, searchEngine = "comet", filter = "peakPicking true 1-", staggeredWindows = F, diaUmpireParams = NULL, cometParams = NULL, spectrastParams = NULL, fragParams = NULL, libType = "consensus", updateSearch = FALSE, updateLib = FALSE, irt = NULL, threads = detectCores()) {
 
 
   find.params = function(params, paramsName, str) {
     if(is.null(params)) {
-      warning(str_c("Argument '", paramsName, "' is missing. Searching for default parameter file...may take a few seconds...", "\n"))
+      warning(str_c("Argument '", paramsName, "' is missing. Searching for default parameter file...may take a few seconds...", "\n"),
+              immediate. = T)
       params = system2("where", args = c("/r", "C:\\", str), stdout = T)
       if(str_detect(params, str)) {
         print(str_c("Found default parameter file..."))
@@ -39,6 +40,7 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
     }
     params
   }
+  diaFiles = check.ms.files(diaFiles = diaFiles)
   if(!updateLib & !updateSearch) {
     if(!dir.exists(projectFolder)) {
       pass = dir.create(projectFolder)
@@ -47,8 +49,10 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
       } else {
         stop("Cannot create project folder")
       }
+    } else if(length(list.files(projectFolder, include.dirs = T, recursive = T)) == 0){
+      print(str_c("Using the following project folder: ", projectFolder))
     } else {
-      stop("Project folder already exists")
+      stop("Project folder already exists and is not empty. The project folder must either not exist, or must be empty if it exists.")
     }
   } else if (updateSearch & dir.exists(projectFolder)) {
     print(str_c("Will update database search and library building in project folder: ", projectFolder))
@@ -113,6 +117,8 @@ create.calibration.lib <- function(diaFiles, fasta, projectFolder, msConvert = N
   if(searchEngine == "msfragger") {
 
     if(is.null(msfragger)) {
+      warning(str_c("Argument '", "msfragger", "' is missing. Searching executable...may take a few seconds...", "\n"),
+              immediate. = T)
       msfragger = system2("where", args = c("/r", "C:\\", "MSFragger*.jar"), stdout = T)
       msfragger = msfragger[grep("MSFragger.*jar$", msfragger)]
       if(length(msfragger) != 1 & !file.exists(msfragger)) {

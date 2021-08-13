@@ -5,7 +5,7 @@
 \title{Creates a calibration library from a set of DIA files and a FASTA file}
 \usage{
 create.calibration.lib(
-  diaFiles,
+  diaFiles = NULL,
   fasta,
   projectFolder,
   msConvert = NULL,
