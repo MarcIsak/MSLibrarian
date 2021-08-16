@@ -33,7 +33,7 @@ The input MS data must conform to the following:
 
 ### Download and install MSLibrarian from Github
 
-To both download and install _MSLibrarian_ from Github, use the **devtools** package. 
+To both download and install _MSLibrarian_ from Github, use the [**devtools**](https://cran.r-project.org/web/packages/devtools/index.html) package. 
 
 ```
 library(devtools)
