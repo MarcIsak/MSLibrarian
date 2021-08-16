@@ -12,12 +12,13 @@ A recommendation is to use a computer with at least 32 GB RAM to avoid issues du
 
 To run all features of MSLibrarian, the following softwares/pipelines **must** be installed on the **C:/**-drive
 
- * [**R version 4.0.0**](https://cran.r-project.org/) or higher. 
- * [**Proteowizard suite version 3.0.20365**](http://proteowizard.sourceforge.net/download.html) or higher 
- * [**Trans-proteomic pipeline version 5.2.0**](https://sourceforge.net/projects/sashimi/files/Trans-Proteomic%20Pipeline%20%28TPP%29/) or higher
- * [**OpenMS version 2.5.0**](https://github.com/OpenMS/OpenMS/releases/tag/Release2.6.0) or higher
+ * [**R version 4.0.0**](https://cran.r-project.org/) or later. 
+ * [**Proteowizard suite version 3.0.20365**](http://proteowizard.sourceforge.net/download.html) or later 
+ * [**Trans-proteomic pipeline version 5.2.0**](https://sourceforge.net/projects/sashimi/files/Trans-Proteomic%20Pipeline%20%28TPP%29/) or later
+ * [**MSFragger v.3.2**](http://msfragger-upgrader.nesvilab.org/upgrader/) or later 
+ * [**OpenMS version 2.5.0**](https://github.com/OpenMS/OpenMS/releases/tag/Release2.6.0) or later
  * [**PREGO**](https://bitbucket.org/searleb/prego-srm-response-predictor/downloads/) 
- * [**DeepLC GUI v0.1.29**](https://github.com/compomics/DeepLC/releases) or higher._Follow the installation guide to setup the miniconda environment._ 
+ * [**DeepLC GUI v0.1.29**](https://github.com/compomics/DeepLC/releases) or later._Follow the installation guide to setup the miniconda environment._ 
   As an alternative, the **DeepLC CLI (.exe)** can be installed instead. 
  * [**DIA-NN v.1.8**](https://github.com/vdemichev/DiaNN/releases/tag/1.7.12). Currently the most recent version, but older versions should also work. 
 
