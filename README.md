@@ -1,5 +1,7 @@
 # MSLibrarian
 
+Must add some pitching intro here, so the reader gets a quick idea about the software and what it can do. 
+
 ## Requirements and recommendations
 
 ### Hardware 
