@@ -32,8 +32,6 @@ map.db.entries <- function(msLib, predDb, chargeRange) {
     }
     dbPrecursors$idx
   }
-
-  tic()
   print("Connecting to SQLite database with Prosit predictions...")
   prositdb = dbConnect(RSQLite::SQLite(), predDb)
   precursorData = dbGetQuery(conn = prositdb, "SELECT StrippedPeptide, PrecursorCharge FROM PrecursorData")

@@ -15,13 +15,13 @@ digest.proteins = function(msLib, rowStr, enzyme,maxMissed,carbamidomethyl,threa
 
   }
 
-  get.masses =  function(seq, k) {
-
-    peptideMass = sum(str_count(seq,as.character(get.amino.acids()$AA[2:nrow(get.amino.acids())]))*
-                        get.amino.acids()$ResidueMass[2:nrow(get.amino.acids())]) +
-      (2*get.atomic.mass()["H"] + get.atomic.mass()["O"]) + (str_count(seq,"C")*57.021464)*k
-
-  }
+  # get.masses =  function(seq, k) {
+  #
+  #   peptideMass = sum(str_count(seq,as.character(get.amino.acids()$AA[2:nrow(get.amino.acids())]))*
+  #                       get.amino.acids()$ResidueMass[2:nrow(get.amino.acids())]) +
+  #     (2*get.atomic.mass()["H"] + get.atomic.mass()["O"]) + (str_count(seq,"C")*57.021464)*k
+  #
+  # }
 
   if(carbamidomethyl == T) {
     k = 1
@@ -35,23 +35,38 @@ digest.proteins = function(msLib, rowStr, enzyme,maxMissed,carbamidomethyl,threa
   names(seqs) = msLib@Sequences@Proteins[,rowStr]
   peptNbr = unlist(lapply(seqs, length))
 
-
-
   peptideData = data.frame(protein_id = unlist(apply(cbind(names(peptNbr), peptNbr), 1, rep.acc)),
                            peptide_sequence = unlist(seqs),
                            stringsAsFactors = F,
                            row.names = 1:length(unlist(seqs)))
-
+#
   print("Calculating masses...")
+#   cl <- makeCluster(threads)
+#   clusterEvalQ(cl, {
+#     .libPaths(.libPaths())
+#     library(MSLibrarian)
+#   })
+  amino_acids = get.amino.acids()[2:nrow(get.amino.acids()), c("AA", "ResidueMass")]
+  amino_acids$ResidueMass[amino_acids$AA == "C"] = amino_acids$ResidueMass[amino_acids$AA == "C"] + 57.021464*k
+  seqs = peptideData$peptide_sequence
+  aaMat = matrix(0, nrow = nrow(amino_acids), ncol = length(seqs))
   cl <- makeCluster(threads)
   clusterEvalQ(cl, {
     .libPaths(.libPaths())
     library(MSLibrarian)
   })
-  peptideData$precursor_mass = unlist(parallel::parLapply(cl, peptideData$peptide_sequence, get.masses, k))
+  aaMat = parSapply(cl, seqs, str_count, pattern = amino_acids$AA)
   stopCluster(cl)
+  aaMat = t(aaMat*amino_acids$ResidueMass)
+  colnames(aaMat) = amino_acids$AA
+  aaMat = apply(aaMat, 1, sum)
+  aaMat = aaMat + (2*get.atomic.mass()["H"] + get.atomic.mass()["O"])
+  peptideData$precursor_mass = aaMat
+  rm(aaMat, amino_acids)
+  gc()
+  #peptideData$precursor_mass = unlist(parallel::parLapply(cl, peptideData$peptide_sequence, get.masses, k))
+  #stopCluster(cl)
   peptideData$peptide_length = sapply(peptideData$peptide_sequence, nchar)
   msLib@Sequences@Peptides$All = peptideData
-  print("Done!")
   msLib
 }

@@ -44,7 +44,6 @@ get.precursors = function(msLib, mzRange,chargeRange, matchDb, threads) {
   #                                            get.protein.id,
   #                                            duplicatedPeptides)
   # stopCluster(cl)
-  print("hihi")
   duplicatedPeptides = duplicatedPeptides[,c("predIdx_z2", "protein_id")]
   duplicatedPeptides = aggregate(duplicatedPeptides, by = list(idx = duplicatedPeptides$predIdx_z2), rbind)
   duplicatedPeptides$protein_id = do.call('rbind', lapply(duplicatedPeptides$protein_id, str_c, collapse = ";"))
