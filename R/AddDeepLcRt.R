@@ -27,9 +27,18 @@ add.deeplc.rt <- function(inputLib, outputLib, calibLib, nCal, deepLcFolder) {
   if(identical(bench$seq, calibLib@PrecursorData$FilterLib$PeptideSequence)) {
     rts = data.frame(benchRt = bench$predicted_tr,
                      calibRt = calibLib@PrecursorData$FilterLib$NormalizedRetentionTime)
+    model = lm(str_c("benchRt", "~","calibRt"), data = rts)
     ggplot(data = rts, mapping = aes(x = benchRt, y = calibRt)) +
+      geom_abline(intercept = 0, slope = 1,color = "black", size = 1) +
       geom_hex(bins = 100) +
-      geom_abline(intercept = 0, slope = 1, color = "red", size = 4) +
+      geom_smooth(method = "lm", color = "red", size = 1) +
+      geom_text(x = min(rts$benchRt), y = max(rts$calibRt), label = str_c("y = ", round(coef(model)[2],2),
+                                                  "x + ",
+                                                  round(coef(model)[1],2),
+                                                  ", R^2 = ",
+                                                  round(summary(model)$r.squared,2)),
+                size = 8, color = "red", hjust = "left") +
+      # geom_abline(intercept = 0, slope = 1, color = "red", size = 4) +
       #geom_point() +
       xlab("Benchmark RTs (min)") + # Should be changed to iRT if that is the input...could be extracted from calibLib I guess...
       ylab("Calibration library RT (min)" ) # Should be changed to iRT if that is the input...could be extracted from calibLib I guess...
