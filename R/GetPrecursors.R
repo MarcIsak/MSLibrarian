@@ -28,12 +28,13 @@ get.precursors = function(msLib, mzRange,chargeRange, matchDb, threads) {
   duplicatedPeptides = msLib@Sequences@Peptides$Predictable[msLib@Sequences@Peptides$Predictable$duplicated_sequence,]
   print("Creating precursor data...")
   print("Removing duplicated sequences...")
-  #precursorCols = c("protein_id", "peptide_sequence", "precursor_mass")
-  precursorCols = c("protein_id", "peptide_sequence", "precursor_mass", str_c("predIdx_z", chargeRange))
-  precursors = msLib@Sequences@Peptides$Predictable[!msLib@Sequences@Peptides$Predictable$duplicated_sequence, precursorCols]
   if(matchDb) {
+    precursorCols = c("protein_id", "peptide_sequence", "precursor_mass", str_c("predIdx_z", chargeRange))
     predIdx = msLib@Sequences@Peptides$Predictable[!msLib@Sequences@Peptides$Predictable$duplicated_sequence, paste("predIdx_z", chargeRange, sep = "")]
+  } else {
+    precursorCols = c("protein_id", "peptide_sequence", "precursor_mass")
   }
+  precursors = msLib@Sequences@Peptides$Predictable[!msLib@Sequences@Peptides$Predictable$duplicated_sequence, precursorCols]
   # cl = makeCluster(threads)
   # clusterEvalQ(cl, {
   #   .libPaths(.libPaths()) # Sets the library path
@@ -44,13 +45,18 @@ get.precursors = function(msLib, mzRange,chargeRange, matchDb, threads) {
   #                                            get.protein.id,
   #                                            duplicatedPeptides)
   # stopCluster(cl)
-  duplicatedPeptides = duplicatedPeptides[,c("predIdx_z2", "protein_id")]
-  duplicatedPeptides = aggregate(duplicatedPeptides, by = list(idx = duplicatedPeptides$predIdx_z2), rbind)
+  duplicatedPeptides = duplicatedPeptides[,c("peptide_sequence", "protein_id")]
+  #duplicatedPeptides = duplicatedPeptides[,c("predIdx_z2", "protein_id")]
+  #duplicatedPeptides = aggregate(duplicatedPeptides, by = list(idx = duplicatedPeptides$predIdx_z2), rbind)
+  duplicatedPeptides = aggregate(duplicatedPeptides, by = list(idx = duplicatedPeptides$peptide_sequence), rbind)
   duplicatedPeptides$protein_id = do.call('rbind', lapply(duplicatedPeptides$protein_id, str_c, collapse = ";"))
   duplicatedPeptides = as.data.table(duplicatedPeptides)
   setkey(duplicatedPeptides, idx)
-  duplicatedPeptides = duplicatedPeptides[.(precursors$predIdx_z2)]
-  if(identical(duplicatedPeptides$idx, precursors$predIdx_z2)) {
+  # duplicatedPeptides = duplicatedPeptides[.(precursors$predIdx_z2)]
+  duplicatedPeptides = duplicatedPeptides[.(precursors$peptide_sequence)]
+
+  # if(identical(duplicatedPeptides$idx, precursors$predIdx_z2)) {
+  if(identical(duplicatedPeptides$idx, precursors$peptide_sequence)) {
     nas = !is.na(duplicatedPeptides$protein_id)
     precursors$protein_id[nas] = str_c(precursors$protein_id[nas], duplicatedPeptides$protein_id[nas], sep = ";")
   } else {
