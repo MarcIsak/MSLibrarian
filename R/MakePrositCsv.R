@@ -7,7 +7,7 @@
 #' @param threads number of threads to use
 #' @export make.prosit.csv
 
-make.prosit.csv <- function(fasta, chargeRange, ceRange, prefix, outputFolder, threads = detectCores()) {
+make.prosit.csv<- function(fasta, chargeRange, ceRange, prefix, outputFolder, threads = detectCores()) {
 
   if(threads > detectCores()) {
     threads = detectCores()
