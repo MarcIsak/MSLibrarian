@@ -8,6 +8,7 @@ merge.prediction.dbs <- function(inputDB, outputDB) {
   get.msms.seq = function(idx) {
     seq(idx["startIdx"],idx["endIdx"])
   }
+  print("hihi")
 
   for(i in inputDB) {
     print("Fetching precursor data...")
@@ -19,7 +20,7 @@ merge.prediction.dbs <- function(inputDB, outputDB) {
     dbDisconnect(tmpDb)
     print(str_c("Number of MS/MS entries: ", nrow(tmpMsms)))
     gc()
-    if(i == min(inputDB)) {
+    if(i == inputDB[1]) {
       outDb <- dbConnect(RSQLite::SQLite(), outputDB)
       print(str_c("Adding precursor data to database: ", outputDB))
       RSQLite::dbWriteTable(conn = outDb, name = "PrecursorData", value = tmpPrec, append = F)

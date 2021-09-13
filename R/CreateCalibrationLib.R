@@ -117,7 +117,7 @@ create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConv
   if(searchEngine == "msfragger") {
 
     if(is.null(msfragger)) {
-      warning(str_c("Argument '", "msfragger", "' is missing. Searching executable...may take a few seconds...", "\n"),
+      warning(str_c("Argument '", "msfragger", "' is missing. Searching for executable...may take a few seconds...", "\n"),
               immediate. = T)
       msfragger = system2("where", args = c("/r", "C:\\", "MSFragger*.jar"), stdout = T)
       msfragger = msfragger[grep("MSFragger.*jar$", msfragger)]
@@ -127,7 +127,7 @@ create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConv
         print("Found MSFragger java application...")
       }
     } else {
-      msfragger = file.path(openMsDir, "bin","OpenSwathAssayGenerator.exe")
+      #msfragger = file.path(openMsDir, "bin","OpenSwathAssayGenerator.exe")
       msfragger = msfragger[grep("MSFragger.*jar$", msfragger)]
       if(length(msfragger) != 1 & !file.exists(msfragger)) {
         stop("Arg - msfragger. Cannot find the MSFragger java application...")

@@ -38,7 +38,7 @@ mod.spectral.lib <- function(projectFolder = NULL, inputLib = NULL, outputLib = 
       stop("Arg - calibrationLib. This object is not of class CalibrationLibrary. Please import the correct RData file.")
     } else {
       print(str_c("Found processed calibration library file: ", calibrationLib))
-      rm(calibrationLib)
+      rm(calibLib)
       gc()
     }
   }

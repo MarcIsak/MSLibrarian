@@ -8,6 +8,7 @@
 
 make.prediction.db <- function(prediction_folder, task_id, sqlite, download = T, zipped = T) {
   tic()
+  print("hihi")
   prosit.download <- function(id) {
     url = str_c("https://www.proteomicsdb.org/prosit/api/download.xsjs?datasetId=", id["task_id"])
     destFile = str_c(prediction_folder, id["pred_file"],".zip")
