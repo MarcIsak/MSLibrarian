@@ -9,15 +9,24 @@
 #' @param fasta Absolute path to a FASTA file for matching of peptides sequences to proteins
 #' @param enzyme Character specifying the enzyme to use for in-silico digestion of sequences in the FASTA file
 #' @param separateMassAcc should mass accuracy be determined for each individual MS file (logical)
+#' @param massAcc Numeric setting the desired MS1 accuracy
 #' @param robustLC Specfies whether Quantification should be run in Robust LC mode. Possible values are "high_accuracy" or "high_precision". Default = NULL.
 #' @export run.diann
 
-run.diann <- function(diannPath, diaFile, libFile, output = NULL, matrices = T, matQ = 0.01, threads = detectCores(), fasta = NULL, enzyme, separateMassAcc = F, robustLC = NULL) {
+run.diann <- function(diannPath, diaFile, libFile, output = NULL, matrices = T, matQ = 0.01, threads = detectCores(), fasta = NULL, enzyme, separateMassAcc = F, massAcc = NULL, robustLC = NULL) {
 
   if(separateMassAcc) {
     separateMassAcc = "--individual-mass-acc"
   } else {
     separateMassAcc = NULL
+  }
+  if(!is.null(massAcc)) {
+    if(is.numeric(massAcc)) {
+      print(str_c("Sets MS1 accuracy to: ", massAcc))
+      massAcc = str_c("--mass-acc-ms1 ", massAcc)
+    } else {
+      stop("Arg - massAcc. Invalid value!")
+    }
   }
   if(is.null(robustLC)) {
     peakCenter = NULL
@@ -89,6 +98,7 @@ run.diann <- function(diannPath, diaFile, libFile, output = NULL, matrices = T, 
                               separateMassAcc,
                               matrices,
                               noProtInf,
-                              peakCenter))
+                              peakCenter,
+                              massAcc))
 
 }

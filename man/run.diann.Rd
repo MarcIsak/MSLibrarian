@@ -15,6 +15,7 @@ run.diann(
   fasta = NULL,
   enzyme,
   separateMassAcc = F,
+  massAcc = NULL,
   robustLC = NULL
 )
 }
@@ -38,6 +39,8 @@ run.diann(
 \item{enzyme}{Character specifying the enzyme to use for in-silico digestion of sequences in the FASTA file}
 
 \item{separateMassAcc}{should mass accuracy be determined for each individual MS file (logical)}
+
+\item{massAcc}{Numeric setting the desired MS1 accuracy}
 
 \item{robustLC}{Specfies whether Quantification should be run in Robust LC mode. Possible values are "high_accuracy" or "high_precision". Default = NULL.}
 }
