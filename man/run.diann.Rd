@@ -16,7 +16,12 @@ run.diann(
   enzyme,
   separateMassAcc = F,
   massAcc = NULL,
-  robustLC = NULL
+  reportLibInfo = T,
+  robustLC = NULL,
+  relaxProtInf = F,
+  carbamidomethyl_C = T,
+  nativeLib = F,
+  matchBetweenRuns = F
 )
 }
 \arguments{
@@ -42,7 +47,17 @@ run.diann(
 
 \item{massAcc}{Numeric setting the desired MS1 accuracy}
 
+\item{reportLibInfo}{Logical determining if extra info on fragment ions and precursors should be saved to main report (default TRUE)}
+
 \item{robustLC}{Specfies whether Quantification should be run in Robust LC mode. Possible values are "high_accuracy" or "high_precision". Default = NULL.}
+
+\item{relaxProtInf}{Logical determining if relaxed protein inference should be enabled. Default = FALSE}
+
+\item{carbamidomethyl_C}{Carbamidomethyl on Cysteine residues as fixed modification. Default = T.}
+
+\item{nativeLib}{Logical setting if the spectral library is a native library or not.}
+
+\item{matchBetweenRuns}{logical determining if match-between-runs (MBR) should be enabled. (Default = FALSE)}
 }
 \description{
 Runs a DIA-NN analysis of the selected DIA-file and input library in TSV format
