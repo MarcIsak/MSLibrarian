@@ -1,6 +1,13 @@
 # MSLibrarian
 
-Must add some pitching intro here, so the reader gets a quick idea about the software and what it can do. 
+MSLibrarian is an R-package to optimize predicted spectral libraries from Prosit (https://www.proteomicsdb.org/prosit/) for usage in targeted analysis of a given set of DIA-MS data.\ 
+Available optimization steps build on 
+* (i) Spectrum-centric conversion and database search of the DIA data via DIA-Umpire and MSFragger
+* (ii) Comparison of identified spectra vs. spectra predicted using variable Collision Energy (CE) settings in Prosit
+* (iii) Retention time prediction by DeepLC, with calibration on observed retention times on this LC setup
+* (iv) Subsetting to most relevant protein set (at relaxed FDR to avoid exclusion of false negatives)
+* (v) Reduction of library to top N most-intense fragment ions to improve filezise and downstream processing speeds
+Refined libraries are written out in openswath or spectronaut format, ready for use in downstream peptide-centric analysis tools such as DIA-NN 1.8.
 
 ## Requirements and recommendations
 
@@ -19,10 +26,9 @@ To run all features of MSLibrarian, the following softwares/pipelines **must** b
  * [**Trans-proteomic pipeline version 5.2.0**](https://sourceforge.net/projects/sashimi/files/Trans-Proteomic%20Pipeline%20%28TPP%29/) or later
  * [**MSFragger version 3.2**](http://msfragger-upgrader.nesvilab.org/upgrader/) or later 
  * [**OpenMS version 2.5.0**](https://github.com/OpenMS/OpenMS/releases/tag/Release2.6.0) or later
- * [**PREGO**](https://bitbucket.org/searleb/prego-srm-response-predictor/downloads/) 
  * [**DeepLC GUI version 0.1.29**](https://github.com/compomics/DeepLC/releases) or later._Follow the installation guide to setup the miniconda environment._ 
   As an alternative, the **DeepLC CLI (.exe)** can be installed instead. 
- * [**DIA-NN version 1.8**](https://github.com/vdemichev/DiaNN/releases/tag/1.7.12). Currently the most recent version, but older versions should also work. 
+ * [**DIA-NN version 1.8**](https://github.com/vdemichev/DiaNN/releases/tag/1.8). Currently the most recent version, but older versions should also work. 
 
 ## MS Data 
 
