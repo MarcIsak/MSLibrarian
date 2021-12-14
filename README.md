@@ -50,7 +50,7 @@ install_github("MarcIsak/MSLibrarian")
 ```
 ### Prosit Spectral Warehouse Databases
 
-MSLibrarian relies on Spectral Warehouse SQLite databases to make predicted spectral libraries. SQLite databases can be downloaded from **Zenodo**(https://doi.org/10.5281/zenodo.5749924) for the following common species:
+MSLibrarian relies on Spectral Warehouse SQLite databases to make predicted spectral libraries. SQLite databases can be downloaded from [**Zenodo**](https://doi.org/10.5281/zenodo.5749924) for the following common species:
 * Homo sapiens (Human)
 * Mus musculus (Mouse)
 * Saccharomyces cerevisiae (Baker´s yeast)
