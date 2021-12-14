@@ -48,11 +48,19 @@ library(devtools)
 install_github("MarcIsak/MSLibrarian")
 
 ```
-### Prosit prediction SQLite databases
+### Prosit Spectral Warehouse Databases
 
-MSLibrarian relies on Prosit prediction SQLite databases to make spectral libraries. SQLite databases can be downloaded for some 
-common species from ProteomeXchange(**insert PXD submission**), or be manually created in MSLibrarian. Go to the **Wiki** of this repository to learn how 
-to create your own Prosit prediction SQLite database. 
+MSLibrarian relies on Spectral Warehouse SQLite databases to make predicted spectral libraries. SQLite databases can be downloaded from **Zenodo**(https://doi.org/10.5281/zenodo.5749924 for the following common species:
+* Homo sapiens (Human)
+* Mus musculus (Mouse)
+* Saccharomyces cerevisiae (Baker´s yeast)
+* Caenorhabditis elegans (Roundworm) 
+* Drosophila melanogaster (Fruit fly)
+* Escherichia coli K12 (Bacterium)
+
+Alternatively, these databases can also be downloaded from within MSLibrarian by the use of the function **get.spectral.db()**. 
+
+To manually create a  Spectral Warehouse SQLite Database, go to the **Wiki** of this repository for full details. 
 
 ### Parameter files 
 
