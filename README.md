@@ -58,7 +58,7 @@ MSLibrarian relies on Spectral Warehouse SQLite databases to make predicted spec
 * Drosophila melanogaster (Fruit fly)
 * Escherichia coli K12 (Bacterium)
 
-Alternatively, these databases can also be downloaded from within MSLibrarian by the use of the function **get.spectral.db()**. 
+Alternatively, these databases can be downloaded from within MSLibrarian by the use of the function **get.spectral.db()**. 
 
 To manually create a  Spectral Warehouse SQLite Database, go to the **Wiki** of this repository for full details. 
 
