@@ -104,7 +104,6 @@ create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConv
 
     oswGen = "OpenSwathAssayGenerator"
     decoyDb ="DecoyDatabase"
-    stop("Found OpenSwathAssayGenerator")
 
   } else if(is.null(openMsDir)) {
       openMsDir = dirname(system2("where", args = "OpenSwathAssayGenerator.exe",stdout = T))
@@ -128,6 +127,10 @@ create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConv
     }
   }
   if(searchEngine == "msfragger") {
+
+    if(Sys.info()["sysname"] == "Linux" & file.exists("/home/MSFragger-3.5/MSFragger-3.5.jar")) {
+      print("Found MSFragger java application...")
+    }
 
     if(is.null(msfragger)) {
       warning(str_c("Argument '", "msfragger", "' is missing. Searching for executable...may take a few seconds...", "\n"),
