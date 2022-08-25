@@ -130,32 +130,31 @@ create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConv
 
     if(Sys.info()["sysname"] == "Linux" & file.exists("/home/MSFragger-3.5/MSFragger-3.5.jar")) {
       print("Found MSFragger java application...")
-    }
-
-    if(is.null(msfragger)) {
-      warning(str_c("Argument '", "msfragger", "' is missing. Searching for executable...may take a few seconds...", "\n"),
-              immediate. = T)
-      msfragger = system2("where", args = c("/r", "C:\\", "MSFragger*.jar"), stdout = T)
-      msfragger = msfragger[grep("MSFragger.*jar$", msfragger)]
-      if(length(msfragger) != 1 & !file.exists(msfragger)) {
-        stop("Cannot auto-detect the MSFragger java application...")
+      msfragger = "/home/MSFragger-3.5/MSFragger-3.5.jar"
+    } else if(is.null(msfragger)) {
+        warning(str_c("Argument '", "msfragger", "' is missing. Searching for executable...may take a few seconds...", "\n"),
+                immediate. = T)
+        msfragger = system2("where", args = c("/r", "C:\\", "MSFragger*.jar"), stdout = T)
+        msfragger = msfragger[grep("MSFragger.*jar$", msfragger)]
+        if(length(msfragger) != 1 & !file.exists(msfragger)) {
+          stop("Cannot auto-detect the MSFragger java application...")
+        } else {
+          print("Found MSFragger java application...")
+        }
       } else {
-        print("Found MSFragger java application...")
+        msfragger = msfragger[grep("MSFragger.*jar$", msfragger)]
+        if(length(msfragger) != 1 & !file.exists(msfragger)) {
+          stop("Arg - msfragger. Cannot find the MSFragger java application...")
+        } else {
+          print("Found MSFragger java application...")
+        }
       }
-    } else {
-      #msfragger = file.path(openMsDir, "bin","OpenSwathAssayGenerator.exe")
-      msfragger = msfragger[grep("MSFragger.*jar$", msfragger)]
-      if(length(msfragger) != 1 & !file.exists(msfragger)) {
-        stop("Arg - msfragger. Cannot find the MSFragger java application...")
-      } else {
-        print("Found MSFragger java application...")
-      }
-    }
   }
   if(!(libType == "consensus" | libType == "best_replicate")) {
     stop("Invalid arg - libType. Possible values are 1) 'consensus' or 2) 'best_replicate'")
   }
   if(searchEngine == "msfragger") {
+    stop("Setting fragparams...")
     fragParams = find.params(fragParams, paramsName = "fragParams", str = "fragger_closed_mslibrarian_default.params")
   } else {
     cometParams = find.params(cometParams, paramsName = "cometParams", str = "comet_mslibrarian_default.params")
