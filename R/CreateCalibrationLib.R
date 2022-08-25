@@ -70,7 +70,7 @@ create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConv
     comet = "philosopher comet"
     peptideProphet = "philosopher peptideprophet"
     interProphet = "philosopher iprophet"
-    stop("We are on a Linux system, so we are good!")
+    print("Found philosopher")
   } else if(is.null(tppDir)) {
       tppDir = dirname(system2("where", args = "PeptideProphetParser.exe",stdout = T))
       if(!dir.exists(tppDir[grep("TPP", tppDir)])) {
@@ -100,19 +100,25 @@ create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConv
       stop("Cannot find all TPP executables in TPP installation folder: InteractParser, PeptideProphet and InterProphet!")
     }
   }
-  if(is.null(openMsDir)) {
-    openMsDir = dirname(system2("where", args = "OpenSwathAssayGenerator.exe",stdout = T))
-    if(!dir.exists(openMsDir[grep("OpenMS", openMsDir)])) {
-      stop("Cannot auto-dectect an installation of OpenMS in your system. Please install or enter path to TPP installation folder!")
-    } else {
-      oswGen = system2("where", args = "OpenSwathAssayGenerator.exe",stdout = T)
-      oswGen = oswGen[grep("OpenMS", oswGen)]
-      decoyDb = system2("where", args = "DecoyDatabase.exe",stdout = T)
-      decoyDb  = decoyDb[grep("OpenMS", decoyDb)]
-      if(length(oswGen) != 1 & length(decoyDb) != 1) {
-        stop("Cannot find both OpenSwathAssayGenerator.exe and DecoyDatabase.exe in OpenMS installation folder!")
+  if(Sys.info()["sysname"] == "Linux" & file.exists("/usr/bin/OpenSwathAssayGenerator")) {
+
+    oswGen = "OpenSwathAssayGenerator"
+    decoyDb ="DecoyDatabase"
+    stop("Found OpenSwathAssayGenerator")
+
+  } else if(is.null(openMsDir)) {
+      openMsDir = dirname(system2("where", args = "OpenSwathAssayGenerator.exe",stdout = T))
+      if(!dir.exists(openMsDir[grep("OpenMS", openMsDir)])) {
+        stop("Cannot auto-dectect an installation of OpenMS in your system. Please install or enter path to TPP installation folder!")
+      } else {
+        oswGen = system2("where", args = "OpenSwathAssayGenerator.exe",stdout = T)
+        oswGen = oswGen[grep("OpenMS", oswGen)]
+        decoyDb = system2("where", args = "DecoyDatabase.exe",stdout = T)
+        decoyDb  = decoyDb[grep("OpenMS", decoyDb)]
+        if(length(oswGen) != 1 & length(decoyDb) != 1) {
+          stop("Cannot find both OpenSwathAssayGenerator.exe and DecoyDatabase.exe in OpenMS installation folder!")
+        }
       }
-    }
   } else {
     oswGen = file.path(openMsDir, "bin","OpenSwathAssayGenerator.exe")
     decoyDb = file.path(openMsDir, "bin","DecoyDatabase.exe")
