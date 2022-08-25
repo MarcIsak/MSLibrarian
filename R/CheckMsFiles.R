@@ -6,7 +6,7 @@ check.ms.files <- function(diaFiles) {
   if(is.null(diaFiles)) {
     stop("Arg - diaFiles. No RAW files have been added")
   } else if(all(file.exists(diaFiles))) {
-    diaFiles = diaFiles[grepl(".raw$", diaFiles)]
+    diaFiles = diaFiles[grepl(".raw$|.d$", diaFiles)]
     if(length(diaFiles) == 0) {
       stop("No RAW files are supplied")
     } else if (any(basename(diaFiles) == diaFiles)) {
@@ -14,9 +14,9 @@ check.ms.files <- function(diaFiles) {
     }
   } else if(length(diaFiles) == 1){
 
-    if(dir.exists(diaFiles) & length(list.files(diaFiles, pattern = ".raw$") != 0)) {
+    if(dir.exists(diaFiles) & length(list.files(diaFiles, pattern = ".raw$|.d$") != 0)) {
       print(str_c("Found raw files in folder:", diaFiles))
-      diaFiles = list.files(diaFiles, pattern = ".raw$", full.names = T)
+      diaFiles = list.files(diaFiles, pattern = ".raw$|.d$", full.names = T)
     } else {
       stop("Arg - diaFiles. Folder and/or raw files in folder do not exist")
     }
