@@ -65,6 +65,7 @@ create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConv
     print("Project folder does not exist. Cannot update the calibration library!")
   }
   if(Sys.info()["sysname"] == "Linux" & file.exists("/usr/local/bin/philosopher")) {
+    system("philosopher workspace --clean")
     system("philosopher workspace --init")
     comet = "philosopher comet"
     peptideProphet = "philosopher peptideprophet"
