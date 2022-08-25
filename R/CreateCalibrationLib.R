@@ -64,25 +64,27 @@ create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConv
   } else {
     print("Project folder does not exist. Cannot update the calibration library!")
   }
-  if(is.null(tppDir)) {
-    tppDir = dirname(system2("where", args = "PeptideProphetParser.exe",stdout = T))
-    if(!dir.exists(tppDir[grep("TPP", tppDir)])) {
-      stop("Cannot auto-dectect an installation of Trans-proteomic pipeline in your system. Please install or enter path to TPP installation folder!")
-    } else {
-      interact = system2("where", args = "InteractParser.exe",stdout = T)
-      interact = interact[grep("TPP", interact)]
-      comet = system2("where", args = "comet.exe",stdout = T)
-      comet = comet[grep("TPP", comet)]
-      peptideProphet = system2("where", args = "PeptideProphetParser.exe",stdout = T)
-      peptideProphet = peptideProphet[grep("TPP", peptideProphet)]
-      interProphet = system2("where", args = "InterProphetParser.exe",stdout = T)
-      interProphet = interProphet[grep("TPP", interProphet)]
-      spectrast = system2("where", args = "spectrast.exe",stdout = T)
-      spectrast = spectrast[grep("TPP", spectrast)]
-      if(!(length(interact) == 1 & length(peptideProphet) == 1 & length(interProphet) == 1 & length(comet) == 1 & length(spectrast) == 1)) {
-        stop("Cannot find all TPP executables in TPP installation folder: InteractParser, PeptideProphet and InterProphet!")
+  if(Sys.info()["sysname"] & file.exists("/usr/local/bin/philosopher")) {
+    stop("We are on a Linux system, so we are good!")
+  } else if(is.null(tppDir)) {
+      tppDir = dirname(system2("where", args = "PeptideProphetParser.exe",stdout = T))
+      if(!dir.exists(tppDir[grep("TPP", tppDir)])) {
+        stop("Cannot auto-dectect an installation of Trans-proteomic pipeline in your system. Please install or enter path to TPP installation folder!")
+      } else {
+        interact = system2("where", args = "InteractParser.exe",stdout = T)
+        interact = interact[grep("TPP", interact)]
+        comet = system2("where", args = "comet.exe",stdout = T)
+        comet = comet[grep("TPP", comet)]
+        peptideProphet = system2("where", args = "PeptideProphetParser.exe",stdout = T)
+        peptideProphet = peptideProphet[grep("TPP", peptideProphet)]
+        interProphet = system2("where", args = "InterProphetParser.exe",stdout = T)
+        interProphet = interProphet[grep("TPP", interProphet)]
+        spectrast = system2("where", args = "spectrast.exe",stdout = T)
+        spectrast = spectrast[grep("TPP", spectrast)]
+        if(!(length(interact) == 1 & length(peptideProphet) == 1 & length(interProphet) == 1 & length(comet) == 1 & length(spectrast) == 1)) {
+          stop("Cannot find all TPP executables in TPP installation folder: InteractParser, PeptideProphet and InterProphet!")
+        }
       }
-    }
   } else {
     comet = file.path(tppDir, "bin", "comet.exe")
     interact = file.path(tppDir, "bin", "InteractParser.exe")
