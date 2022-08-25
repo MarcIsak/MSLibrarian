@@ -64,7 +64,7 @@ create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConv
   } else {
     print("Project folder does not exist. Cannot update the calibration library!")
   }
-  if(Sys.info()["sysname"] & file.exists("/usr/local/bin/philosopher")) {
+  if(Sys.info()["sysname"] == "Linux" & file.exists("/usr/local/bin/philosopher")) {
     stop("We are on a Linux system, so we are good!")
   } else if(is.null(tppDir)) {
       tppDir = dirname(system2("where", args = "PeptideProphetParser.exe",stdout = T))
