@@ -39,6 +39,7 @@ create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConv
       stop(str_c("Arg - '", paramsName,"'. File does not exist!"))
     }
     params
+    stop("Parameters function pass msfragger")
   }
   diaFiles = check.ms.files(diaFiles = diaFiles)
   if(!updateLib & !updateSearch) {
@@ -154,7 +155,6 @@ create.calibration.lib <- function(diaFiles = NULL, fasta, projectFolder, msConv
     stop("Invalid arg - libType. Possible values are 1) 'consensus' or 2) 'best_replicate'")
   }
   if(searchEngine == "msfragger") {
-    stop("Setting fragparams...")
     fragParams = find.params(fragParams, paramsName = "fragParams", str = "fragger_closed_mslibrarian_default.params")
   } else {
     cometParams = find.params(cometParams, paramsName = "cometParams", str = "comet_mslibrarian_default.params")
